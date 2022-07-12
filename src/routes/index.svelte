@@ -1,0 +1,715 @@
+<script>
+	import { onMount, beforeUpdate, afterUpdate } from 'svelte';
+	import { createHour, fetchHour, fetchEmployeesHours, totalHoursWorked } from '@stores/hours';
+	import {
+		fetchTeamHours,
+		fetchEmployeesHoursWeekly,
+		fetchEmployeesHoursMonthly,
+		fetchEmployeesHoursYearly
+	} from '@stores/hours';
+	import { fetchEmployeeProfile } from '@stores/employees';
+	import { user } from '@stores/login';
+	import { get } from 'svelte/store';
+	import ChartJS from '../components/ChartJS.svelte';
+	import { DateTime, Info, Interval } from 'luxon';
+
+	import { loading } from '@stores/general';
+
+	let userStore = get(user);
+	let isAdmin = undefined;
+	let isUser = undefined;
+	let isSuperAdmin = undefined;
+
+	////Luxon////
+
+	let yearNumber = DateTime.now().year;
+	let weekNumber = DateTime.now().weekNumber;
+	let month = DateTime.now().month;
+	let daysInMonth = DateTime.now().daysInMonth;
+
+	//let hoursExpected;
+
+	///
+	let percentageYear = 0;
+	let percentageToday = 0;
+	let percentageWeek = 0;
+	let percentageMonth = 0;
+
+	let hoursToday = 0;
+	let hoursWeek = 0;
+	let hoursMonth = 0;
+
+	/// Buttons
+	let buttonWeekly = true;
+	let buttonMonthly = false;
+	let buttonYearly = false;
+
+	onMount(async () => {
+		//loading.set(true);
+		profile = await fetchEmployeeProfile();
+
+		profile = await profile.first_name;
+
+		//loading.set(false);
+	});
+
+	/* 	async function profileFetch() {
+		profile = await fetchEmployeeProfile();
+
+		profile = await profile.first_name;
+	}
+
+	profileFetch(); */
+
+	$: console.log('profile');
+
+	//$: console.log('hoursExpected', hoursExpected);
+	//let newFormat = { weeksInWeekYear: 'long' };
+
+	$: console.log('LuxonTOTAL DATA', DateTime.now());
+	$: console.log('WeekDays', Info.weekdays()[0]);
+	$: console.log('Dias del añ0', DateTime.now().weeksInWeekYear);
+	let d1 = DateTime.now().toFormat('yyyy-MM-dd');
+	let d2 = '2022-07-01';
+	$: console.log('d1 and d2', d2);
+	$: console.log('Hoy', d1 == d2);
+
+	fetchHour();
+
+	//console.log('Mes :', DateTime.now().month);
+	let allDays = [];
+	for (let i = 1; i <= daysInMonth; i++) {
+		const dt = DateTime.fromObject({
+			year: yearNumber,
+			month: month,
+			day: i
+		});
+		allDays[i] = {
+			day: dt.day,
+			dayName: dt.weekdayLong
+		};
+	}
+
+	let bussinesDays = allDays.filter(
+		(item) => item.dayName !== 'Sunday' && item.dayName !== 'Saturday'
+	);
+
+	//Work Year
+	let dataHoursYear;
+	dataHoursYear = async () => {
+		//let res = await fetchHour();
+		//console.log('totalHoursWorked', $totalHoursWorked);
+		let res = await fetchEmployeeProfile();
+		let hoursExpected = await res.hour_expected;
+		let hoursTotal = $totalHoursWorked; /* await res.totalHoursWorked */
+
+		let start =
+			(hoursTotal / hoursExpected) * 100 > 100
+				? 100
+				: Math.round((hoursTotal / hoursExpected) * 100);
+		percentageYear = start;
+		let end = 100 - start;
+		let labels = ['start', 'end'];
+		let data = [start, end];
+		return { labels, data };
+	};
+
+	///Work Today
+	let dataHoursToday;
+
+	dataHoursToday = async () => {
+		let res = await fetchHour();
+		//console.log(' resTODAY', await res);
+		let test;
+
+		let hoursExpected = 8;
+		let registers = res ? await res.Registers : undefined;
+		//console.log('registers ', registers);
+
+		let labels = ['start', 'end'];
+		let data = [];
+		let results = registers
+			? registers
+					.map((item) => {
+						let now = DateTime.now().toFormat('yyyy-MM-dd');
+						let dateCurrent = DateTime.fromISO(item.createdAt).toFormat('yyyy-MM-dd');
+						//console.log('now', now);
+						//console.log('dateCurrentTODAY', dateCurrent);
+						if (now == dateCurrent) {
+							return item.hours_worked;
+						}
+						return 0;
+					})
+					.reduce((a, b) => a + b)
+			: 0;
+		hoursToday = results;
+		//console.log('results  ', (results / hoursExpected) * 100);
+		let start =
+			(results / hoursExpected) * 100 > 100 ? 100 : Math.round((results / hoursExpected) * 100);
+		let end = 100 - start;
+		percentageToday = start;
+		data = [start > 100 ? 100 : start, end];
+
+		//console.log('data TODAY', { labels, data });
+		return { labels, data };
+	};
+
+	///Work Week
+	let dataHoursWeek;
+
+	dataHoursWeek = async () => {
+		let res = await fetchHour();
+
+		let hoursExpected = 8 * 5;
+		let registers = res ? await res.Registers : undefined;
+		//console.log('registers ', registers);
+
+		const dt = DateTime.fromObject({
+			weekYear: yearNumber,
+			weekNumber: weekNumber
+		});
+		const dateFromStr = dt.startOf('week');
+		const dateToStr = dt.endOf('week');
+
+		let results = registers
+			? registers
+					.filter((item) => {
+						let dateCurrent = DateTime.fromISO(item.createdAt);
+						if (dateCurrent >= dateFromStr && dateCurrent <= dateToStr) {
+							return item;
+						}
+					})
+					.map((item) => item.hours_worked)
+					.reduce((a, b) => a + b, 0)
+			: 0;
+		hoursWeek = results;
+		//console.log('results week', results);
+
+		let start =
+			(results / hoursExpected) * 100 > 100 ? 100 : Math.round((results / hoursExpected) * 100);
+		let end = 100 - start;
+		percentageWeek = start;
+
+		let labels = ['start', 'end'];
+		let data = [start, end];
+
+		return { labels, data };
+	};
+
+	///Work Month
+	let dataHoursMonth;
+
+	dataHoursMonth = async () => {
+		let res = await fetchHour();
+		let hoursExpected = 8 * bussinesDays.length;
+		//console.log('horas al mes : ', hoursExpected);
+		let registers = res ? await res.Registers : undefined;
+		//console.log('registers ', registers);
+
+		const dt = DateTime.fromObject({
+			year: yearNumber,
+			month: month
+		});
+		const dateFromStr = dt.startOf('month');
+		const dateToStr = dt.endOf('month');
+		let results = registers
+			? registers
+					.filter((item) => {
+						let dateCurrent = DateTime.fromISO(item.createdAt);
+						if (dateCurrent >= dateFromStr && dateCurrent <= dateToStr) {
+							return item;
+						}
+					})
+					.map((item) => item.hours_worked)
+					.reduce((a, b) => a + b)
+			: 0;
+		hoursMonth = results;
+		//console.log('results Month', results);
+
+		let start =
+			(results / hoursExpected) * 100 > 100 ? 100 : Math.round((results / hoursExpected) * 100);
+		let end = 100 - start;
+		//console.log('start Month', start);
+		percentageMonth = start;
+
+		let labels = ['start', 'end'];
+		let data = [start, end];
+
+		return { labels, data };
+	};
+
+	//HOURS CHART JS , WEEKLY , MONTHLY, YEARLY
+
+	//// WEEKLY
+
+	let dataHoursWeekly;
+
+	dataHoursWeekly = async () => {
+		const dt = DateTime.fromObject({
+			weekYear: yearNumber,
+			weekNumber: weekNumber
+		});
+		const dateFromStr = dt.startOf('week');
+		const dateToStr = dt.endOf('week');
+
+		//,console.log('PLUSS', dateToStr);
+
+		let start = dateFromStr.toFormat('yyyy-MM-dd');
+		let end = dateToStr.toFormat('yyyy-MM-dd');
+		let res = await fetchEmployeesHoursWeekly();
+
+		//console.log('res', res);
+		let days = [];
+		for (let i = 0; i <= 6; i++) {
+			let dateCurrent = dateFromStr.plus({ days: i });
+			let dateCurrentFormated = dateCurrent.toFormat('yyyy-MM-dd');
+			let value;
+			let count = 0;
+			while (count < res.length) {
+				let dateResCurrent = new Date(res[count].createdAt).toISOString().split('T')[0];
+
+				//console.log('UNO', dateCurrentFormated);
+
+				//console.log('DOS', dateResCurrent);
+				if (dateResCurrent == dateCurrentFormated) {
+					value = res[count].hours_worked;
+					break;
+				} else {
+					value = 0;
+					count++;
+				}
+			}
+			days[i] = {
+				weekDay: dateCurrent.weekdayShort,
+				hoursWorked: value
+			};
+		}
+		//console.log('days', days);
+
+		let labels = days
+			.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
+			.map((item) => {
+				return item.weekDay;
+			});
+
+		let data = days
+			.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
+			.map((item) => {
+				return item.hoursWorked;
+			});
+
+		//console.log('labels', labels);
+		//console.log('values', values);
+
+		return { labels, data };
+	};
+	//dataHoursWeekly();
+
+	let dataHoursMonthly;
+	dataHoursMonthly = async () => {
+		let res = await fetchEmployeesHoursMonthly();
+		let months = [];
+		let value;
+
+		for (let i = 0; i <= 11; i++) {
+			let countMonths = i + 1;
+			const dt = DateTime.fromObject({
+				year: yearNumber,
+				month: countMonths
+			});
+
+			let resCount = 0;
+			while (resCount < res.length) {
+				//console.log('UNO', dateCurrentFormated);
+
+				//console.log('DOS', dateResCurrent);
+				if (countMonths === res[resCount]._id) {
+					value = res[resCount].totalHoursWorked;
+					break;
+				} else {
+					value = 0;
+					resCount++;
+				}
+			}
+
+			months[i] = {
+				month: dt.monthShort,
+				totalHoursWorked: value
+			};
+		}
+
+		let labels = months.map((item) => item.month);
+		let data = months.map((item) => item.totalHoursWorked);
+		//console.log('meses', labels);
+		return { labels, data };
+	};
+
+	let dataHoursYearly;
+	dataHoursYearly = async () => {
+		let res = await fetchEmployeesHoursYearly();
+		let years = [];
+		let value;
+		let rangeAge = 2;
+		//console.log('res', res);
+		let yearsAgo = yearNumber - rangeAge;
+
+		for (let i = 0; i <= rangeAge; i++) {
+			/* const dt = DateTime.fromObject({
+				year: yearNumber
+			}); */
+
+			let resCount = 0;
+			while (resCount < res.length) {
+				//console.log('UNO', dateCurrentFormated);
+
+				//console.log('DOS', dateResCurrent);
+				if (yearsAgo === res[resCount]._id) {
+					value = res[resCount].totalHoursWorked;
+					break;
+				} else {
+					value = 0;
+					resCount++;
+				}
+			}
+
+			years[i] = {
+				year: yearsAgo,
+				totalHoursWorked: value
+			};
+			yearsAgo++;
+		}
+
+		//console.log('years', years);
+
+		let labels = years.map((item) => item.year);
+		let data = years.map((item) => item.totalHoursWorked);
+		//console.log('meses', data);
+		return { labels, data };
+	};
+	//dataHoursYearly();
+
+	let profile;
+
+	$: {
+		userStore = get(user);
+		//console.log('is admin?', userStore)
+		if (userStore) {
+			const roles = userStore.body.roles;
+			//console.log('roles', roles);
+			for (let i = 0; i < roles.length; i++) {
+				if (roles[i].name === 'user') {
+					//console.log('se cumple: ', roles[i].name);
+					isUser = true;
+				}
+				if (roles[i].name === 'admin') {
+					//console.log('se cumple: ', roles[i].name);
+					isAdmin = true;
+				}
+				if (roles[i].name === 'superAdmin') {
+					//console.log('se cumple: ', roles[i].name);
+					isSuperAdmin = true;
+				}
+			}
+		}
+	}
+
+	//$: console.log('profile', profile);
+
+	//Fetch Datas
+
+	let dataEmployeeHour;
+	$: {
+		dataEmployeeHour = async () => {
+			let res = await fetchHour();
+			//console.log('fetchTeamHours', res);
+			let dataResults = await res.Registers;
+
+			let labels = dataResults.map((item) => new Date(item.createdAt).toISOString().split('T')[0]);
+			let data = dataResults.map((item) => item.hours_worked);
+			//console.log('labels INDEX', labels);
+			return { labels, data };
+		};
+	}
+
+	let dataTeamHours;
+	$: {
+		dataTeamHours = async () => {
+			let res = await fetchTeamHours();
+
+			let dataResults = res.employeesTeam;
+			//console.log('fetchDataEmployeesHours', dataResults);
+			let labels = dataResults.map((item) => item.first_name);
+			let data = dataResults.map((item) => item.hoursWorked);
+			//console.log('labels INDEX', labels);
+			return { labels, data };
+		};
+	}
+	let dataEmployeesHour;
+
+	dataEmployeesHour = async () => {
+		let res = await fetchEmployeesHours();
+		//console.log('res', res);
+		//let dataResults = res.employeesTeam;
+		//console.log('fetchDataEmployeesHours', dataResults);
+		let labels = res.map((item) => item.employee.first_name);
+		let data = res.map((item) => item.totalHoursWorked);
+		console.log('res', { labels, data });
+		return { labels, data };
+	};
+	//console.log('dataEmployeesHour', dataEmployeesHour());
+
+	//async function fetchDataEmployeesHours() {}
+
+	let currentData;
+	$: currentData = { data: dataHoursWeekly(), week: true };
+	//$: console.log('currentData', currentData);
+</script>
+
+<div class="container md:max-w-5xl h-max px-4 mx-auto py-6">
+	<div
+		class="flex justify-center md:justify-start mt-12 mb-6 pb-6 border-b-[1px] border-tertiary/30"
+	>
+		<h1 class="text-secondary text-3xl  font-bold">
+			Welcome, <span>{profile ? profile : ''}</span> !
+		</h1>
+	</div>
+
+	{#if !isSuperAdmin}
+		<div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-x-8 pb-6">
+			<div class="col-span-1 md:col-span-6 lg:col-span-12 mb-4">
+				<h2 class="text-secondary text-xl font-bold  md:mb-0">Overview</h2>
+			</div>
+			<div
+				class="col-span-1  md:col-span-3 bg-white w-full flex items-center justify-center rounded-xl shadow-lg p-6 mb-4"
+			>
+				<div class=" w-4/12 lg:w-[50px]  h-fit relative">
+					<ChartJS
+						chartID="percentageToday"
+						percentage={true}
+						type="doughnut"
+						dataLabelsAndData={{ data: dataHoursToday(), week: false }}
+						title="percentageToday"
+					/>
+
+					<div
+						class={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-end select-none  ${
+							percentageToday >= 0 && percentageToday <= 25
+								? 'text-carnation'
+								: percentageToday >= 26 && percentageToday <= 50
+								? 'text-yellow-orange'
+								: percentageToday >= 51 && percentageToday <= 75
+								? 'text-primary'
+								: 'text-jungle-green'
+						}`}
+					>
+						<p class="text-[1.2rem] md:text-[0.7rem] lg:text-[0.7rem] font-bold t">
+							{percentageToday}
+						</p>
+						<p class="text-[0.7rem]  md:text-[0.4rem] lg:text-[0.4rem] pb-[0.10rem]">%</p>
+					</div>
+				</div>
+				<div class="flex flex-col ml-4">
+					<span class="text-xl md:text-sm text-tertiary font-medium"> Total Today </span>
+					<p class="text-3xl md:text-2xl font-bold text-secondary">{hoursToday}h</p>
+				</div>
+			</div>
+			<div
+				class="col-span-1  md:col-span-3 bg-white w-full flex items-center justify-center rounded-xl shadow-lg p-6 mb-4"
+			>
+				<div class=" w-4/12 lg:w-[50px]  h-fit relative">
+					<ChartJS
+						chartID="percentageWeek"
+						percentage={true}
+						type="doughnut"
+						dataLabelsAndData={{ data: dataHoursWeek(), week: false }}
+						title="percentageToday"
+					/>
+
+					<div
+						class={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-end select-none  ${
+							percentageWeek >= 0 && percentageWeek <= 25
+								? 'text-carnation'
+								: percentageWeek >= 26 && percentageWeek <= 50
+								? 'text-yellow-orange'
+								: percentageWeek >= 51 && percentageWeek <= 75
+								? 'text-primary'
+								: 'text-jungle-green'
+						}`}
+					>
+						<p class="text-[1.2rem] md:text-[0.7rem] lg:text-[0.7rem] font-bold ">
+							{percentageWeek}
+						</p>
+						<p class="text-[0.7rem]  md:text-[0.4rem] lg:text-[0.4rem] pb-[0.10rem] ">%</p>
+					</div>
+				</div>
+				<div class="flex flex-col ml-4">
+					<span class="text-xl md:text-sm text-tertiary font-medium"> Total Week </span>
+					<p class="text-3xl md:text-2xl font-bold text-secondary">{hoursWeek}h</p>
+				</div>
+			</div>
+			<div
+				class="col-span-1  md:col-span-3 bg-white w-full flex items-center justify-center rounded-xl shadow-lg p-6 mb-4"
+			>
+				<div class=" w-4/12 lg:w-[50px]   relative">
+					<ChartJS
+						chartID="percentageMoth"
+						percentage={true}
+						type="doughnut"
+						dataLabelsAndData={{ data: dataHoursMonth(), week: false }}
+						title="percentageToday"
+					/>
+
+					<div
+						class={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-end select-none ${
+							percentageMonth >= 0 && percentageMonth <= 25
+								? 'text-carnation'
+								: percentageMonth >= 26 && percentageMonth <= 50
+								? 'text-yellow-orange'
+								: percentageMonth >= 51 && percentageMonth <= 75
+								? 'text-primary'
+								: 'text-jungle-green'
+						}`}
+					>
+						<p class="text-[1.2rem] md:text-[0.7rem] lg:text-[0.7rem] font-bold ">
+							{percentageMonth}
+						</p>
+						<p class="text-[0.7rem]  md:text-[0.4rem] lg:text-[0.4rem] pb-[0.10rem] ">%</p>
+					</div>
+				</div>
+				<div class="flex flex-col ml-4">
+					<span class="text-xl md:text-sm text-tertiary font-medium"> Total Month </span>
+					<p class="text-3xl md:text-2xl font-bold text-secondary">{hoursMonth}h</p>
+				</div>
+			</div>
+
+			<div
+				class="col-span-1  md:col-span-3 bg-white w-full flex items-center justify-center rounded-xl shadow-lg p-6 mb-4"
+			>
+				<div class=" w-4/12 lg:w-[50px]  h-fit relative">
+					<ChartJS
+						chartID="percentageYear"
+						percentage={true}
+						type="doughnut"
+						dataLabelsAndData={{ data: dataHoursYear(), week: false }}
+						title="percentageToday"
+					/>
+
+					<div
+						class={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-end select-none ${
+							percentageYear >= 0 && percentageYear <= 25
+								? 'text-carnation'
+								: percentageYear >= 26 && percentageYear <= 50
+								? 'text-yellow-orange'
+								: percentageYear >= 51 && percentageYear <= 75
+								? 'text-primary'
+								: 'text-jungle-green'
+						}`}
+					>
+						<p class="text-[1.2rem] md:text-[0.7rem] lg:text-[0.7rem] font-bold ">
+							{percentageYear}
+						</p>
+						<p class="text-[0.7rem]  md:text-[0.4rem] lg:text-[0.4rem] pb-[0.1rem]">%</p>
+					</div>
+				</div>
+				<div class="flex flex-col ml-4">
+					<span class="text-xl md:text-sm text-tertiary font-medium"> Total year </span>
+					<p class="text-3xl md:text-2xl font-bold text-secondary">{$totalHoursWorked}h</p>
+				</div>
+			</div>
+		</div>
+
+		<div
+			class="w-full bg-white rounded-xl p-6 flex flex-col items-center justify-center mb-6 shadow-lg"
+		>
+			<!-- <h2 class="uppercase text-center font-semibold text-xl text-gray-400 mb-4">My hours</h2> -->
+			<!-- <canvas class="!w-[70%] !h-fit !flex" id="myTeamHoursChart" /> -->
+			<div class="w-full md:w-11/12">
+				<div class="flex flex-col md:flex-row justify-between items-center relative">
+					<h2 class="text-secondary text-xl font-bold mb-4 ">My Hours</h2>
+					<div class="flex gap-x-1 justify-end mb-4 bg-selago rounded-md w-fit p-1 ">
+						<button
+							class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
+								buttonWeekly ? 'bg-white text-primary shadow-sm' : 'text-tertiary'
+							}`}
+							on:click={() => {
+								(buttonWeekly = true),
+									(buttonMonthly = false),
+									(buttonYearly = false),
+									(currentData = { data: dataHoursWeekly(), week: true });
+							}}
+						>
+							Weekly
+						</button>
+						<button
+							class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
+								buttonMonthly ? 'bg-white text-primary shadow-sm' : 'text-tertiary'
+							}`}
+							on:click={() => {
+								(buttonWeekly = false),
+									(buttonMonthly = true),
+									(buttonYearly = false),
+									(currentData = { data: dataHoursMonthly(), week: true });
+							}}
+						>
+							Monthly
+						</button>
+						<button
+							class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
+								buttonYearly ? 'bg-white text-primary shadow-sm' : 'text-tertiary'
+							}`}
+							on:click={() => {
+								(buttonWeekly = false),
+									(buttonMonthly = false),
+									(buttonYearly = true),
+									(currentData = { data: dataHoursYearly(), week: false });
+							}}
+						>
+							Yearly
+						</button>
+					</div>
+				</div>
+
+				{#key currentData}
+					<ChartJS
+						chartID="myHoursEmployee"
+						type="line"
+						dataLabelsAndData={currentData}
+						push={true}
+						title="My Hours"
+					/>
+				{/key}
+			</div>
+		</div>
+		{#if $user.body.teamAdmin}
+			<div
+				class="w-full bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center mt-12 mb-6"
+			>
+				<!-- <canvas class="!w-[70%] !h-fit !flex" id="myTeamHoursChart" /> -->
+				<div class="w-full md:w-11/12">
+					<h2 class="text-secondary text-xl font-bold text-left mb-4 ">Team Hours</h2>
+					<ChartJS
+						chartID="myHoursTeam"
+						type="line"
+						dataLabelsAndData={{ data: dataTeamHours(), week: false }}
+						title="Team Hours"
+					/>
+				</div>
+			</div>
+		{/if}
+	{:else}
+		<div
+			class="w-full bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center mb-6"
+		>
+			<div class="w-full md:w-11/12">
+				<h2 class="text-secondary text-xl font-bold text-left mb-4 ">Employees Hours</h2>
+				<ChartJS
+					chartID="myHoursEmployees"
+					type="line"
+					dataLabelsAndData={{ data: dataEmployeesHour(), week: false }}
+					title="Employees Hours"
+				/>
+			</div>
+		</div>
+	{/if}
+</div>
+<!-- <App /> -->

@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin&family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+	box-sizing: border-box;
+	outline: none;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	background-color: #f0f0fd;
+}
+
+#app {
+	font-family: 'Plus Jakarta Sans', Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	border: none;
+	min-height: 100%;
+}
+
+@layer components {
+	.table {
+		@apply w-auto  bg-white text-sm  table-auto;
+	}
+	/* .table th {
+		@apply px-3 py-4 font-semibold text-base border-b-2 border-black bg-blue-200;
+	} */
+	.table td {
+		@apply py-3 px-4;
+	}
+	.table tr {
+		@apply border-b border-tertiary/30 py-3 px-2 hover:bg-selago transition-all;
+	}
+	.table tr:last-child {
+		@apply border-none;
+	}
+}
+
+/* tr:last-child {
+	border-bottom: 0 !important;
+} */
+
+@media screen and (max-width: 768px) {
+	table {
+		width: 100%;
+		display: block;
+	}
+	thead {
+		display: none;
+	}
+	tr:nth-of-type(2n) {
+		background-color: inherit;
+	}
+
+	/* table tr {
+		margin-bottom: 2rem;
+	} */
+	tbody {
+		display: grid;
+	}
+
+	td {
+		display: block;
+		text-align: center;
+	}
+
+	/* 	tr:last-child {
+		border-bottom: 0 !important;
+	} */
+	/* td:before {
+		content: attr(data-th);
+		display: block;
+		font-size: 1rem;
+		line-height: 1.5rem;
+		text-align: center;
+		font-weight: 600;
+		padding-bottom: 0.75rem;
+	} */
+}
