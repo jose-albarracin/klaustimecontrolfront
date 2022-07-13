@@ -7,10 +7,14 @@
 		fetchEmployeesHoursMonthly,
 		fetchEmployeesHoursYearly
 	} from '@stores/hours';
+
+	import { fetchTeamHoursWeekly } from '@stores/hours';
+
 	import { fetchEmployeeProfile } from '@stores/employees';
 	import { user } from '@stores/login';
 	import { get } from 'svelte/store';
 	import ChartJS from '../components/ChartJS.svelte';
+	import ChartJsGroups from '../components/ChartJsGroups.svelte';
 	import { DateTime, Info, Interval } from 'luxon';
 
 	import { loading } from '@stores/general';
@@ -430,7 +434,7 @@
 			return { labels, data };
 		};
 	}
-
+	/* 
 	let dataTeamHours;
 	$: {
 		dataTeamHours = async () => {
@@ -443,7 +447,7 @@
 			//console.log('labels INDEX', labels);
 			return { labels, data };
 		};
-	}
+	} */
 	let dataEmployeesHour;
 
 	dataEmployeesHour = async () => {
@@ -456,13 +460,85 @@
 		console.log('res', { labels, data });
 		return { labels, data };
 	};
-	//console.log('dataEmployeesHour', dataEmployeesHour());
-
-	//async function fetchDataEmployeesHours() {}
 
 	let currentData;
 	$: currentData = { data: dataHoursWeekly(), week: true };
 	//$: console.log('currentData', currentData);
+
+	let dataTeamHours;
+	$: {
+		dataTeamHours = async () => {
+			let res1 = await fetchTeamHoursWeekly();
+			let dataResults = await res1.employeesTeam;
+			console.log('resTEAM', dataResults);
+
+			const dt = DateTime.fromObject({
+				weekYear: yearNumber,
+				weekNumber: weekNumber
+			});
+			const dateFromStr = dt.startOf('week');
+			const dateToStr = dt.endOf('week');
+
+			//,console.log('PLUSS', dateToStr);
+
+			let start = dateFromStr.toFormat('yyyy-MM-dd');
+			let end = dateToStr.toFormat('yyyy-MM-dd');
+
+			let array = [];
+			let array2 = [];
+
+			array = dataResults.forEach((element) => {
+				let res = element.registersHours;
+
+				//console.log('res', res);
+				let days = [];
+				for (let i = 0; i <= 6; i++) {
+					let dateCurrent = dateFromStr.plus({ days: i });
+					let dateCurrentFormated = dateCurrent.toFormat('yyyy-MM-dd');
+					let value = 0;
+					let count = 0;
+					//console.log('res.length', res.length);
+					while (count < res.length) {
+						let dateResCurrent = new Date(res[count].createdAt).toISOString().split('T')[0];
+
+						//console.log('UNO', dateCurrentFormated);
+
+						//console.log('DOS', dateResCurrent);
+						if (dateResCurrent == dateCurrentFormated) {
+							value = res[count].hours_worked ? res[count].hours_worked : 0;
+							break;
+						} else {
+							value = 0;
+							count++;
+						}
+					}
+					days[i] = {
+						weekDay: dateCurrent.weekdayShort,
+						hoursWorked: value
+					};
+				}
+				//console.log('days', days);
+
+				let labels = days
+					.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
+					.map((item) => {
+						return item.weekDay;
+					});
+
+				let data = days
+					.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
+					.map((item) => {
+						return item.hoursWorked;
+					});
+
+				console.log('gasgasdgsdagas', { labels, data, title: element.first_name });
+				array2.push({ labels, data, title: element.first_name });
+			});
+
+			console.log('bbbb', array2);
+			return array2;
+		};
+	}
 </script>
 
 <div class="container md:max-w-5xl h-max px-4 mx-auto py-6">
@@ -475,7 +551,7 @@
 	</div>
 
 	{#if !isSuperAdmin}
-		<div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-x-8 pb-6">
+		<!-- <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-x-8 pb-6">
 			<div class="col-span-1 md:col-span-6 lg:col-span-12 mb-4">
 				<h2 class="text-secondary text-xl font-bold  md:mb-0">Overview</h2>
 			</div>
@@ -616,7 +692,7 @@
 					<p class="text-3xl md:text-2xl font-bold text-secondary">{$totalHoursWorked}h</p>
 				</div>
 			</div>
-		</div>
+		</div> -->
 
 		<div
 			class="w-full bg-white rounded-xl p-6 flex flex-col items-center justify-center mb-6 shadow-lg"
@@ -686,11 +762,39 @@
 			>
 				<!-- <canvas class="!w-[70%] !h-fit !flex" id="myTeamHoursChart" /> -->
 				<div class="w-full md:w-11/12">
-					<h2 class="text-secondary text-xl font-bold text-left mb-4 ">Team Hours</h2>
-					<ChartJS
+					<div class="flex flex-col md:flex-row justify-between items-center relative">
+						<h2 class="text-secondary text-xl font-bold text-left mb-4 ">Team Hours</h2>
+						<div class="flex gap-x-1 justify-end mb-4 bg-selago rounded-md w-fit p-1 ">
+							<button
+								class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
+									buttonWeekly ? 'bg-white text-primary shadow-sm' : 'text-tertiary'
+								}`}
+								on:click={() => {}}
+							>
+								Weekly
+							</button>
+							<button
+								class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
+									buttonMonthly ? 'bg-white text-primary shadow-sm' : 'text-tertiary'
+								}`}
+								on:click={() => {}}
+							>
+								Monthly
+							</button>
+							<button
+								class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
+									buttonYearly ? 'bg-white text-primary shadow-sm' : 'text-tertiary'
+								}`}
+								on:click={() => {}}
+							>
+								Yearly
+							</button>
+						</div>
+					</div>
+					<ChartJsGroups
 						chartID="myHoursTeam"
 						type="line"
-						dataLabelsAndData={{ data: dataTeamHours(), week: false }}
+						dataLabelsAndData={{ data: dataTeamHours(), week: true }}
 						title="Team Hours"
 					/>
 				</div>
@@ -702,7 +806,7 @@
 		>
 			<div class="w-full md:w-11/12">
 				<h2 class="text-secondary text-xl font-bold text-left mb-4 ">Employees Hours</h2>
-				<ChartJS
+				<ChartJsGroups
 					chartID="myHoursEmployees"
 					type="line"
 					dataLabelsAndData={{ data: dataEmployeesHour(), week: false }}

@@ -46,8 +46,9 @@ export const fetchHour = async () => {
 			Authorization: `Bearer ${userStore.token}`
 		}
 	};
-	//console.log('condig', config);
+	//console.log('id', id);
 	const url = `http://localhost:3001/api/hoursWorkedEmployees/${userStore.body._id}`;
+	//console.log('url', url);
 	//console.log('url', url);
 	//console.log('config', config);
 	const res = await fetch(url, config);
@@ -304,4 +305,33 @@ export const fetchEmployeesHoursYearly = async () => {
 		loading.set(false);
 	}
 	return data.Results;
+};
+
+/////********Hours TEAM Worked RANGE*********////
+/* WEEKLY */
+
+export const fetchTeamHoursWeekly = async () => {
+	loading.set(true);
+	let userStore = get(user);
+	let config = {
+		//mode: 'no-cors'
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+			Authorization: `Bearer ${userStore.token}`
+		}
+	};
+	//console.log('condig', config);
+	const url = `http://localhost:3001/api/hoursWorkedTeamRangeWeekly/${userStore.body.teamAdmin}`;
+	const res = await fetch(url, config);
+
+	const data = await res.json();
+
+	//console.log('data', data);
+	if (res.ok) {
+		loading.set(false);
+	}
+
+	return data.Results[0];
 };

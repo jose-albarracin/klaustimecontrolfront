@@ -30,13 +30,42 @@
 
 	$: {
 		createChart = async () => {
+			let dataInput = [];
 			//console.log('dentro de chart', await dataLabelsAndData);
 			//console.log('resultsFinal', await dataLabelsAndData);
 			let resultsFinal = await dataLabelsAndData.data;
-			//console.log('resultsFinal', resultsFinal);
+			console.log('resultsFinal', resultsFinal);
 			/* if (resultsFinal) { */
-			labels = resultsFinal.labels;
-			data = resultsFinal.data;
+			labels = resultsFinal[0].labels;
+			console.log('labels from Chart', labels);
+			//data = resultsFinal.data;
+			let dynamicColors = function () {
+				let r = Math.floor(Math.random() * 255);
+				let g = Math.floor(Math.random() * 255);
+				let b = Math.floor(Math.random() * 255);
+				return 'rgb(' + r + ',' + g + ',' + b + ')';
+			};
+
+			resultsFinal.forEach((element) => {
+				let colorAxis = dynamicColors;
+				//console.log('colorAxis', colorAxis());
+				let obj = {
+					label: element.title,
+					data: element.data,
+					//fill: true,
+					borderColor: colorAxis(),
+
+					pointBorderColor: '#fff',
+					pointBorderWidth: 4,
+					tension: 0.4
+				};
+				let obj2 = {
+					pointBackgroundColor: obj.borderColor,
+					backgroundColor: obj.borderColor
+				};
+				//console.log('colorAxisParte b', colorAxis());
+				dataInput.push(Object.assign(obj, obj2));
+			});
 
 			//console.log('Title', title);
 			//console.log('resultsFinal', resultsFinal.labels);
@@ -98,7 +127,7 @@
 					//console.log('bodyLines', tooltip.body);
 					const tableHead = document.createElement('thead');
 
-					bodyLines.forEach((body) => {
+					bodyLines.forEach((body, i) => {
 						const tr = document.createElement('tr');
 						tr.style.borderWidth = 0;
 
@@ -111,6 +140,21 @@
 
 						const text = document.createTextNode(body);
 
+						const colors = tooltip.labelColors[i];
+						const span2 = document.createElement('span');
+
+						/* span.style.color = '#B8B4CB';
+						span.style.font = '"20px'; */
+
+						span2.style.background = colors.backgroundColor;
+						span2.style.borderColor = colors.borderColor;
+						span2.style.borderWidth = '2px';
+						span2.style.marginRight = '10px';
+						span2.style.height = '10px';
+						span2.style.width = '10px';
+						span2.style.display = 'inline-block';
+
+						th.appendChild(span2);
 						th.appendChild(span);
 						span.appendChild(text);
 
@@ -121,28 +165,19 @@
 
 					const tableBody = document.createElement('tbody');
 					titleLines.forEach((title, i) => {
-						/* const colors = tooltip.labelColors[i]; */
-
-						const span = document.createElement('span');
-						/* span.style.color = '#B8B4CB';
-						span.style.font = '"20px'; */
-						span.classList.add('text-tertiary', 'text-[0.8rem]');
-
-						/* span.style.background = colors.backgroundColor;
-						span.style.borderColor = colors.borderColor;
-						span.style.borderWidth = '2px';
-						span.style.marginRight = '10px';
-						span.style.height = '10px';
-						span.style.width = '10px';
-						span.style.display = 'inline-block'; */
+						//console.log('colors', tooltip);
 
 						const tr = document.createElement('tr');
 						//tr.style.backgroundColor = 'inherit';
 						tr.style.borderWidth = 0;
 
+						const span = document.createElement('span');
+						span.classList.add('text-tertiary', 'text-[0.8rem]');
+
 						const td = document.createElement('td');
 						td.style.borderWidth = 0;
 						td.style.display = 'flex';
+						td.style.justifyContent = 'center';
 						//console.log('title', title);
 						let text = '';
 						if (dataLabelsAndData.week) {
@@ -153,6 +188,7 @@
 							text = document.createTextNode(title);
 						}
 
+						//td.appendChild(span2);
 						td.appendChild(span);
 						span.appendChild(text);
 						tr.appendChild(td);
@@ -190,45 +226,7 @@
 				type: type,
 				data: {
 					labels: labels,
-					datasets: [
-						{
-							label: title,
-							data: data,
-
-							...(percentage && {
-								...(data[0] >= 0 &&
-									data[0] <= 25 && {
-										backgroundColor: ['#fa4f67', '#fce3e7']
-									}),
-								...(data[0] >= 26 &&
-									data[0] <= 50 && {
-										backgroundColor: ['#fcaf3a', '#fef2dc']
-									}),
-								...(data[0] >= 51 &&
-									data[0] <= 75 && {
-										backgroundColor: ['#6566EA', '#F0F0FD']
-									}),
-								...(data[0] >= 76 &&
-									data[0] <= 100 && {
-										backgroundColor: ['#29ae76', '#d8f3ea']
-									}),
-								borderWidth: 0,
-								cutout: '80%',
-								borderRadius: 10,
-								rotation: 180
-							}),
-
-							...(type === 'line' && {
-								fill: true,
-								backgroundColor: gradient,
-								borderColor: '#6566EA',
-								pointBackgroundColor: '#6566EA',
-								pointBorderColor: '#fff',
-								pointBorderWidth: 4,
-								tension: 0.4
-							})
-						}
-					]
+					datasets: dataInput
 				},
 				options: {
 					//responsive: true,
@@ -245,7 +243,11 @@
 						}),
 						...(type === 'line' && {
 							legend: {
-								display: false
+								/* display: false */
+								position: 'bottom',
+								font: {
+									family: 'Plus Jakarta Sans'
+								}
 							},
 							tooltip: {
 								enabled: false,
@@ -258,7 +260,6 @@
 								callbacks: {
 									label: function (context) {
 										let label = '';
-										//console.log('context.dataset', context);
 										const ctx = context.chart.ctx;
 
 										ctx.fillStyle = 'blue';
@@ -273,61 +274,6 @@
 									}
 								},
 								external: externalTooltipHandler
-								/* displayColors: false,
-								padding: {
-									left: 20,
-									right: 20,
-									top: 10,
-									bottom: 10
-								},
-								backgroundColor: '#fff',
-								footerColor: '#B8B4CB',
-
-								footerFont: {
-									family: 'Plus Jakarta Sans',
-									weight: 400,
-									size: 10
-								},
-								bodyFont: {
-									family: 'Plus Jakarta Sans',
-									weight: 900,
-									size: 14
-								},
-								bevelWidth: 3,
-								bevelHighlightColor: 'rgb(255, 99, 71)',
-								bevelShadowColor: 'rgb(255, 99, 71)',
-								shadowOffsetX: 3,
-								shadowOffsetY: 3,
-								shadowBlur: 10,
-								shadowColor: 'rgb(255, 99, 71)',
-
-								callbacks: {
-									title: titleTooltip,
-									label: function (context) {
-										let label = '';
-										//console.log('context.dataset', context);
-										const ctx = context.chart.ctx;
-
-										ctx.fillStyle = 'blue';
-
-										if (label) {
-											label += ': ';
-										}
-										if (context.parsed.y !== null) {
-											label += context.parsed.y + 'h';
-										}
-										return label;
-									},
-									labelTextColor: function (context) {
-										return '#383874';
-									},
-									footer: function (context) {
-										//console.log('context.dataset', context);
-
-										let label = context[0].label;
-										return label;
-									}
-								} */
 							}
 						})
 					},
@@ -339,10 +285,10 @@
 						}
 					}),
 					...(type === 'line' && {
-						interaction: {
+						/* interaction: {
 							intersect: false,
 							mode: 'index'
-						},
+						}, */
 						radius: 5,
 						hitRadius: 30,
 						//hoverRadius: 5,
