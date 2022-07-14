@@ -6,8 +6,9 @@
 	import { onMount } from 'svelte';
 	import InlineSVG from 'svelte-inline-svg';
 	import { goto } from '$app/navigation';
+	import Inputs from '@components/inputs.svelte';
 
-	import MultiSelect from 'svelte-multiselect';
+	//import MultiSelect from 'svelte-multiselect';
 
 	onMount(async () => {
 		teams = await fetchTeams();
@@ -37,7 +38,7 @@
 
 	let outerDivClass =
 		'shadow !appearance-none !border !border-[#e5e7eb] !rounded-lg w-full !py-2 !px-3 leading-tight';
-	//$: console.log('data', employeeState);
+	//$: console.log('employeeState', employeeState);
 	//$: console.log('multiSe results', value);
 	//$: console.log('Teams', teams);
 </script>
@@ -62,76 +63,71 @@
 			class="grid grid-cols-1 md:grid-cols-12 gap-x-8"
 		>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="first_name">
-					First name
-				</label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="text"
-					placeholder="First name"
+				<Inputs
+					label="First Name"
 					name="first_name"
-					id="first_name"
-					required
+					type="text"
+					required={true}
 					bind:value={employeeState.first_name}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="last_name">
-					Last name
-				</label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="text"
-					placeholder="Last name"
+				<Inputs
+					label="Last Name"
 					name="last_name"
-					id="last_name"
-					required
+					type="text"
+					required={true}
 					bind:value={employeeState.last_name}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-12">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="phone"> Phone </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="number"
-					placeholder="Phone"
+				<Inputs
+					label="Phone"
 					name="phone"
-					id="phone"
-					required
+					type="number"
+					required={true}
 					bind:value={employeeState.phone}
 				/>
 			</div>
 
 			<div class="col-span-1 md:col-span-6 mb-4">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Team </label>
-				<MultiSelect {outerDivClass} bind:selected={employeeState.team} options={teamList} />
+				<Inputs
+					label="Team"
+					select={true}
+					multiselect={true}
+					options={teamList}
+					bind:selected={employeeState.team}
+				/>
+				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Team </label>
+				<MultiSelect {outerDivClass} bind:selected={employeeState.team} options={teamList} /> -->
 			</div>
 			<div class="col-span-1 md:col-span-6 mb-4">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="roles"> Roles </label>
+				<Inputs
+					label="Roles"
+					select={true}
+					multiselect={true}
+					options={listRoles}
+					bind:selected={employeeState.roles}
+				/>
+				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="roles"> Roles </label>
 
-				<MultiSelect {outerDivClass} bind:selected={employeeState.roles} options={listRoles} />
+				<MultiSelect {outerDivClass} bind:selected={employeeState.roles} options={listRoles} /> -->
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="roles"> Email </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="email"
-					placeholder="Email"
+				<Inputs
+					label="Email"
 					name="email"
-					id="email"
-					required
+					type="email"
+					required={true}
 					bind:value={employeeState.email}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="roles"> Password </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="password"
-					placeholder="Password"
+				<Inputs
+					label="Password"
 					name="password"
-					id="password"
-					required
+					type="password"
+					required={true}
 					bind:value={employeeState.password}
 				/>
 			</div>

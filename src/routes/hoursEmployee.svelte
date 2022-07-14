@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { user } from '../stores/login';
 	import { createHour, fetchHour } from '../stores/hours';
+	import Inputs from '../components/inputs.svelte';
 
 	//VARSS
 
@@ -57,28 +58,16 @@
 			class="grid grid-cols-1 md:grid-cols-12 gap-x-8"
 		>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="start"> Start </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="number"
-					placeholder="Start"
+				<Inputs
+					label="Start"
 					name="start"
-					id="start"
-					required
+					type="number"
+					required={true}
 					bind:value={stateHour.start}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="end"> End </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="text"
-					placeholder="End"
-					name="end"
-					id="end"
-					required
-					bind:value={stateHour.end}
-				/>
+				<Inputs label="End" name="end" type="number" required={true} bind:value={stateHour.end} />
 			</div>
 			<div class="col-span-1 md:col-span-12 flex justify-center">
 				<button

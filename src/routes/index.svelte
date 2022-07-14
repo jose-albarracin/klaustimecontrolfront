@@ -455,8 +455,10 @@
 	let currentDataTotalEmployees;
 	$: {
 		if (!isSuperAdmin) {
+			if (isAdmin) {
+				currentDataTeam = { data: dataTeamHoursWeekly(), week: true, nameData: 'weeklyTeam' };
+			}
 			currentData = { data: dataHoursWeekly(), week: true };
-			currentDataTeam = { data: dataTeamHoursWeekly(), week: true, nameData: 'weeklyTeam' };
 		} else {
 			currentDataTotalEmployees = {
 				data: dataTotalEmployeesWeekly(),

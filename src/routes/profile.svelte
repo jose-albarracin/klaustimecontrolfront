@@ -1,12 +1,10 @@
-<script context="module">
+<script>
 	import { get } from 'svelte/store';
 	import { user } from '../stores/login';
 	import { onMount } from 'svelte';
-</script>
-
-<script>
 	import { loading } from '@stores/general';
 	import { fade } from 'svelte/transition';
+	import Inputs from '../components/inputs.svelte';
 
 	//VARS
 
@@ -101,55 +99,39 @@
 			class="grid grid-cols-1 md:grid-cols-12 gap-x-8"
 		>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="first_name">
-					First name
-				</label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="text"
-					placeholder="First name"
+				<Inputs
+					label="First Name"
 					name="first_name"
-					id="first_name"
-					required
+					type="text"
+					required={true}
 					bind:value={userState.first_name}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="last_name">
-					Last name
-				</label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="text"
-					placeholder="Last name"
+				<Inputs
+					label="Last Name"
 					name="last_name"
-					id="last_name"
-					required
+					type="text"
+					required={true}
 					bind:value={userState.last_name}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="email"> Email</label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="email"
-					placeholder="Email"
+				<Inputs
+					label="Email"
 					name="email"
-					id="email"
-					required
-					disabled
+					type="email"
+					required={true}
+					disabled={true}
 					bind:value={userState.email}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="phone"> Phone</label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="number"
-					placeholder="Phone"
+				<Inputs
+					label="Phone"
 					name="phone"
-					id="phone"
-					required
+					type="number"
+					required={true}
 					bind:value={userState.phone}
 				/>
 			</div>

@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import InlineSVG from 'svelte-inline-svg';
 	import { goto } from '$app/navigation';
+	import Inputs from '@components/inputs.svelte';
 
 	import MultiSelect from 'svelte-multiselect';
 
@@ -54,7 +55,7 @@
 
 	let outerDivClass =
 		'shadow !appearance-none !border !border-[#e5e7eb] !rounded-lg w-full !py-2 !px-3 leading-tight';
-	//$: console.log('data', teamState);
+	$: console.log('teamState', teamState);
 	//$: console.log('multiSe results', value);
 	//$: console.log('Teams', teams);
 </script>
@@ -78,40 +79,40 @@
 			class="grid grid-cols-1 md:grid-cols-12 gap-x-8"
 		>
 			<div class="col-span-1 md:col-span-12">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="first_name"> Title </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="text"
-					placeholder="Title"
+				<Inputs
+					label="Title"
 					name="title"
-					id="title"
-					required
+					type="text"
+					required={true}
 					bind:value={teamState.title}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-12">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="last_name">
-					Description
-				</label>
-				<textarea
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					placeholder="Description"
+				<Inputs
+					label="Description"
+					textarea={true}
 					name="description"
-					id="description"
 					rows="6"
-					required
+					required={true}
 					bind:value={teamState.description}
 				/>
 			</div>
 
 			<div class="col-span-1 md:col-span-12 mb-4">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Admin </label>
+				<Inputs
+					label="Admin"
+					select={true}
+					multiselect={null}
+					options={employessList}
+					bind:selectedValues={unwindAdmin}
+				/>
+				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Admin </label>
 				<MultiSelect
 					maxSelect={1}
 					{outerDivClass}
 					bind:selectedValues={unwindAdmin}
 					options={employessList}
-				/>
+				/> -->
 			</div>
 
 			<div class="col-span-1 md:col-span-12 flex justify-center">

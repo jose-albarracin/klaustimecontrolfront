@@ -7,6 +7,7 @@
 	import InlineSVG from 'svelte-inline-svg';
 	import { goto } from '$app/navigation';
 	import MultiSelect from 'svelte-multiselect';
+	import Inputs from '@components/inputs.svelte';
 
 	import { loading } from '@stores/general';
 	//import MultiSelect from '@components/MultiSelect.svelte';
@@ -68,8 +69,10 @@
 	function employeeFromResults() {
 		//console.log('resultsEmp', results.employee);
 		let obj = {};
-		obj['label'] = `${results.employee.first_name} ${results.employee.last_name}`;
-		obj['value'] = results.employee._id;
+		obj['label'] = `${results.employee ? results.employee.first_name : ''} ${
+			results.employee ? results.employee.last_name : ''
+		}`;
+		obj['value'] = results.employee ? results.employee._id : '';
 
 		return obj;
 	}
@@ -120,50 +123,42 @@
 			class="grid grid-cols-1 md:grid-cols-12 gap-x-8"
 		>
 			<div class="col-span-1 md:col-span-6 mb-4">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Employee </label>
+				<Inputs
+					label="Employee"
+					select={true}
+					multiselect={null}
+					options={employessList}
+					bind:selected={unwindEmployee}
+				/>
+				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Employee </label>
 				<MultiSelect
 					maxSelect={1}
 					{outerDivClass}
 					bind:selected={unwindEmployee}
 					options={employessList}
-				/>
+				/> -->
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="date"> Date </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="date"
-					placeholder="Date"
+				<Inputs
+					label="Date"
 					name="date"
-					id="date"
-					required
-					disabled
+					type="date"
+					required={true}
+					disabled={true}
 					bind:value={hoursState.createdAt}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="start"> Start </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="number"
-					placeholder="Start"
+				<Inputs
+					label="Start"
 					name="start"
-					id="start"
-					required
+					type="number"
+					required={true}
 					bind:value={hoursState.start}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="end"> End </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="number"
-					placeholder="End"
-					name="end"
-					id="end"
-					required
-					bind:value={hoursState.end}
-				/>
+				<Inputs label="End" name="end" type="number" required={true} bind:value={hoursState.end} />
 			</div>
 
 			<div class="col-span-1 md:col-span-12 flex justify-center">

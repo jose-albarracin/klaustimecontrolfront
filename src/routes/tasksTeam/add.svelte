@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import InlineSVG from 'svelte-inline-svg';
 	import { goto } from '$app/navigation';
+	import Inputs from '@components/inputs.svelte';
 
 	export let results;
 
@@ -50,54 +51,35 @@
 			class="grid grid-cols-1 md:grid-cols-12 gap-x-8"
 		>
 			<div class="col-span-1 md:col-span-12">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="title"> Title </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="text"
-					placeholder="Title"
+				<Inputs
+					label="Title"
 					name="title"
-					id="title"
-					required
+					type="text"
+					required={true}
 					bind:value={taskState.title}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-12">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="description">
-					Description
-				</label>
-				<textarea
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					placeholder="Description"
+				<Inputs
+					textarea={true}
+					label="Description"
 					name="description"
-					id="description"
 					rows="6"
-					required
+					required={true}
 					bind:value={taskState.description}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="start"> Start </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="date"
-					placeholder="Start"
+				<Inputs
+					label="Start"
 					name="start"
-					id="start"
-					required
+					type="date"
+					required={true}
 					bind:value={taskState.start}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="end"> End </label>
-				<input
-					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight !focus:outline-none !focus:shadow-outline mb-4"
-					type="date"
-					placeholder="End"
-					name="end"
-					id="end"
-					required
-					bind:value={taskState.end}
-				/>
+				<Inputs label="End" name="end" type="date" required={true} bind:value={taskState.end} />
 			</div>
 			<div class="col-span-1 md:col-span-12 flex justify-center">
 				<button
