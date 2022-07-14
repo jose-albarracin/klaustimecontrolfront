@@ -8,7 +8,13 @@
 		fetchEmployeesHoursYearly
 	} from '@stores/hours';
 
-	import { fetchTeamHoursWeekly } from '@stores/hours';
+	import { fetchTeamHoursWeekly, fetchTeamHourMonthly, fetchTeamHourYearly } from '@stores/hours';
+
+	import {
+		fetchTotalEmployeesWeekly,
+		fetchTotalEmployeesMonthly,
+		fetchTotalEmployeesYearly
+	} from '@stores/hours';
 
 	import { fetchEmployeeProfile } from '@stores/employees';
 	import { user } from '@stores/login';
@@ -57,26 +63,9 @@
 		//loading.set(false);
 	});
 
-	/* 	async function profileFetch() {
-		profile = await fetchEmployeeProfile();
-
-		profile = await profile.first_name;
-	}
-
-	profileFetch(); */
-
 	$: console.log('profile');
 
-	//$: console.log('hoursExpected', hoursExpected);
-	//let newFormat = { weeksInWeekYear: 'long' };
-
 	$: console.log('LuxonTOTAL DATA', DateTime.now());
-	$: console.log('WeekDays', Info.weekdays()[0]);
-	$: console.log('Dias del añ0', DateTime.now().weeksInWeekYear);
-	let d1 = DateTime.now().toFormat('yyyy-MM-dd');
-	let d2 = '2022-07-01';
-	$: console.log('d1 and d2', d2);
-	$: console.log('Hoy', d1 == d2);
 
 	fetchHour();
 
@@ -462,15 +451,32 @@
 	};
 
 	let currentData;
-	$: currentData = { data: dataHoursWeekly(), week: true };
+	let currentDataTeam;
+	let currentDataTotalEmployees;
+	$: {
+		if (!isSuperAdmin) {
+			currentData = { data: dataHoursWeekly(), week: true };
+			currentDataTeam = { data: dataTeamHoursWeekly(), week: true, nameData: 'weeklyTeam' };
+		} else {
+			currentDataTotalEmployees = {
+				data: dataTotalEmployeesWeekly(),
+				week: true,
+				nameData: 'weeklyTotalEmployees'
+			};
+		}
+	}
+
 	//$: console.log('currentData', currentData);
 
-	let dataTeamHours;
+	/* ******TEAMS****** */
+
+	//WEEKLY
+	let dataTeamHoursWeekly;
 	$: {
-		dataTeamHours = async () => {
+		dataTeamHoursWeekly = async () => {
 			let res1 = await fetchTeamHoursWeekly();
 			let dataResults = await res1.employeesTeam;
-			console.log('resTEAM', dataResults);
+			//console.log('resTEAM', dataResults);
 
 			const dt = DateTime.fromObject({
 				weekYear: yearNumber,
@@ -531,11 +537,301 @@
 						return item.hoursWorked;
 					});
 
-				console.log('gasgasdgsdagas', { labels, data, title: element.first_name });
+				//console.log('gasgasdgsdagas', { labels, data, title: element.first_name });
 				array2.push({ labels, data, title: element.first_name });
 			});
 
+			//console.log('bbbb', array2);
+			return array2;
+		};
+	}
+
+	//MONTHLY
+	let dataTeamHoursMonthly;
+	$: {
+		dataTeamHoursMonthly = async () => {
+			let res1 = await fetchTeamHourMonthly();
+			let dataResults = await res1.employeesTeam;
+			let months = [];
+			let value;
+
+			//console.log('res', res1);
+			let array = [];
+			let array2 = [];
+			array = dataResults.forEach((element) => {
+				let res = element.registersHours;
+				for (let i = 0; i <= 11; i++) {
+					let countMonths = i + 1;
+					const dt = DateTime.fromObject({
+						year: yearNumber,
+						month: countMonths
+					});
+
+					let resCount = 0;
+					while (resCount < res.length) {
+						//console.log('UNO', dateCurrentFormated);
+
+						//console.log('DOS', dateResCurrent);
+						if (countMonths === res[resCount]._id) {
+							value = res[resCount].totalHoursWorked;
+							break;
+						} else {
+							value = 0;
+							resCount++;
+						}
+					}
+
+					months[i] = {
+						month: dt.monthShort,
+						totalHoursWorked: value
+					};
+				}
+
+				let labels = months.map((item) => item.month);
+				let data = months.map((item) => item.totalHoursWorked);
+
+				//console.log('labelsss', { labels, data, title: element.first_name });
+				array2.push({ labels, data, title: element.first_name });
+			});
+
+			return array2;
+		};
+	}
+
+	//YEARLY
+	let dataTeamHoursYearly;
+	$: {
+		dataTeamHoursYearly = async () => {
+			let res1 = await fetchTeamHourYearly();
+			let dataResults = await res1.employeesTeam;
+			//console.log('res', res1);
+			let array = [];
+			let array2 = [];
+			array = dataResults.forEach((element) => {
+				let years = [];
+				let value;
+				let rangeAge = 2;
+				//console.log('res', res);
+				let yearsAgo = yearNumber - rangeAge;
+				let res = element.registersHours;
+
+				for (let i = 0; i <= rangeAge; i++) {
+					/* const dt = DateTime.fromObject({
+				year: yearNumber
+			}); */
+
+					let resCount = 0;
+					while (resCount < res.length) {
+						//console.log('UNO', dateCurrentFormated);
+
+						//console.log('DOS', dateResCurrent);
+						if (yearsAgo === res[resCount]._id) {
+							value = res[resCount].totalHoursWorked;
+							break;
+						} else {
+							value = 0;
+							resCount++;
+						}
+					}
+
+					years[i] = {
+						year: yearsAgo,
+						totalHoursWorked: value
+					};
+					yearsAgo++;
+				}
+
+				//console.log('years', years);
+
+				let labels = years.map((item) => item.year);
+				let data = years.map((item) => item.totalHoursWorked);
+
+				array2.push({ labels, data, title: element.first_name });
+			});
+
+			return array2;
+		};
+	}
+
+	///TOTAL EMPLOYEE
+	// WEEKLY
+	let dataTotalEmployeesWeekly;
+	$: {
+		dataTotalEmployeesWeekly = async () => {
+			let dataResults = await fetchTotalEmployeesWeekly();
+			//let dataResults = await res1.employeesTeam;
+			//console.log('resTEAM', dataResults);
+
+			const dt = DateTime.fromObject({
+				weekYear: yearNumber,
+				weekNumber: weekNumber
+			});
+			const dateFromStr = dt.startOf('week');
+			const dateToStr = dt.endOf('week');
+
+			//,console.log('PLUSS', dateToStr);
+
+			let start = dateFromStr.toFormat('yyyy-MM-dd');
+			let end = dateToStr.toFormat('yyyy-MM-dd');
+
+			let array = [];
+			let array2 = [];
+
+			array = dataResults.forEach((element) => {
+				let res = element.registersHours;
+
+				//console.log('res', res);
+				let days = [];
+				for (let i = 0; i <= 6; i++) {
+					let dateCurrent = dateFromStr.plus({ days: i });
+					let dateCurrentFormated = dateCurrent.toFormat('yyyy-MM-dd');
+					let value = 0;
+					let count = 0;
+					//console.log('res.length', res.length);
+					while (count < res.length) {
+						let dateResCurrent = new Date(res[count].createdAt).toISOString().split('T')[0];
+
+						//console.log('UNO', dateCurrentFormated);
+
+						//console.log('DOS', dateResCurrent);
+						if (dateResCurrent == dateCurrentFormated) {
+							value = res[count].hours_worked ? res[count].hours_worked : 0;
+							break;
+						} else {
+							value = 0;
+							count++;
+						}
+					}
+					days[i] = {
+						weekDay: dateCurrent.weekdayShort,
+						hoursWorked: value
+					};
+				}
+				//console.log('days', days);
+
+				let labels = days
+					.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
+					.map((item) => {
+						return item.weekDay;
+					});
+
+				let data = days
+					.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
+					.map((item) => {
+						return item.hoursWorked;
+					});
+
+				//console.log('gasgasdgsdagas', { labels, data, title: element.first_name });
+				array2.push({ labels, data, title: element.employee.first_name });
+			});
+
 			console.log('bbbb', array2);
+			return array2;
+		};
+		//dataTotalEmployeesYearly();
+	}
+	// MONTHLY
+	let dataTotalEmployeesMonthly;
+	$: {
+		dataTotalEmployeesMonthly = async () => {
+			let dataResults = await fetchTotalEmployeesMonthly();
+
+			let months = [];
+			let value;
+
+			//console.log('res', res1);
+			let array = [];
+			let array2 = [];
+			array = dataResults.forEach((element) => {
+				let res = element.registersHours;
+				for (let i = 0; i <= 11; i++) {
+					let countMonths = i + 1;
+					const dt = DateTime.fromObject({
+						year: yearNumber,
+						month: countMonths
+					});
+
+					let resCount = 0;
+					while (resCount < res.length) {
+						//console.log('UNO', dateCurrentFormated);
+
+						//console.log('DOS', dateResCurrent);
+						if (countMonths === res[resCount]._id) {
+							value = res[resCount].totalHoursWorked;
+							break;
+						} else {
+							value = 0;
+							resCount++;
+						}
+					}
+
+					months[i] = {
+						month: dt.monthShort,
+						totalHoursWorked: value
+					};
+				}
+
+				let labels = months.map((item) => item.month);
+				let data = months.map((item) => item.totalHoursWorked);
+
+				//console.log('labelsss', { labels, data, title: element.first_name });
+				array2.push({ labels, data, title: element.employee.first_name });
+			});
+
+			return array2;
+		};
+	}
+
+	let dataTotalEmployeesYearly;
+	$: {
+		dataTotalEmployeesYearly = async () => {
+			let dataResults = await fetchTotalEmployeesYearly();
+			let array = [];
+			let array2 = [];
+			array = dataResults.forEach((element) => {
+				let years = [];
+				let value;
+				let rangeAge = 2;
+				//console.log('res', res);
+				let yearsAgo = yearNumber - rangeAge;
+				let res = element.registersHours;
+
+				for (let i = 0; i <= rangeAge; i++) {
+					/* const dt = DateTime.fromObject({
+				year: yearNumber
+			}); */
+
+					let resCount = 0;
+					while (resCount < res.length) {
+						//console.log('UNO', dateCurrentFormated);
+
+						//console.log('DOS', dateResCurrent);
+						if (yearsAgo === res[resCount]._id) {
+							value = res[resCount].totalHoursWorked;
+							break;
+						} else {
+							value = 0;
+							resCount++;
+						}
+					}
+
+					years[i] = {
+						year: yearsAgo,
+						totalHoursWorked: value
+					};
+					yearsAgo++;
+				}
+
+				//console.log('years', years);
+
+				let labels = years.map((item) => item.year);
+				let data = years.map((item) => item.totalHoursWorked);
+
+				array2.push({ labels, data, title: element.employee.first_name });
+			});
+
+			//console.log('array2', array2);
+
 			return array2;
 		};
 	}
@@ -551,7 +847,7 @@
 	</div>
 
 	{#if !isSuperAdmin}
-		<!-- <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-x-8 pb-6">
+		<div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-x-8 pb-6">
 			<div class="col-span-1 md:col-span-6 lg:col-span-12 mb-4">
 				<h2 class="text-secondary text-xl font-bold  md:mb-0">Overview</h2>
 			</div>
@@ -692,7 +988,7 @@
 					<p class="text-3xl md:text-2xl font-bold text-secondary">{$totalHoursWorked}h</p>
 				</div>
 			</div>
-		</div> -->
+		</div>
 
 		<div
 			class="w-full bg-white rounded-xl p-6 flex flex-col items-center justify-center mb-6 shadow-lg"
@@ -767,36 +1063,62 @@
 						<div class="flex gap-x-1 justify-end mb-4 bg-selago rounded-md w-fit p-1 ">
 							<button
 								class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
-									buttonWeekly ? 'bg-white text-primary shadow-sm' : 'text-tertiary'
+									currentDataTeam.nameData == 'weeklyTeam'
+										? 'bg-white text-primary shadow-sm'
+										: 'text-tertiary'
 								}`}
-								on:click={() => {}}
+								on:click={() => {
+									currentDataTeam = {
+										data: dataTeamHoursWeekly(),
+										week: true,
+										nameData: 'weeklyTeam'
+									};
+								}}
 							>
 								Weekly
 							</button>
 							<button
 								class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
-									buttonMonthly ? 'bg-white text-primary shadow-sm' : 'text-tertiary'
+									currentDataTeam.nameData == 'monthlyTeam'
+										? 'bg-white text-primary shadow-sm'
+										: 'text-tertiary'
 								}`}
-								on:click={() => {}}
+								on:click={() => {
+									currentDataTeam = {
+										data: dataTeamHoursMonthly(),
+										week: true,
+										nameData: 'monthlyTeam'
+									};
+								}}
 							>
 								Monthly
 							</button>
 							<button
 								class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
-									buttonYearly ? 'bg-white text-primary shadow-sm' : 'text-tertiary'
+									currentDataTeam.nameData == 'yearlyTeam'
+										? 'bg-white text-primary shadow-sm'
+										: 'text-tertiary'
 								}`}
-								on:click={() => {}}
+								on:click={() => {
+									currentDataTeam = {
+										data: dataTeamHoursYearly(),
+										week: false,
+										nameData: 'yearlyTeam'
+									};
+								}}
 							>
 								Yearly
 							</button>
 						</div>
 					</div>
-					<ChartJsGroups
-						chartID="myHoursTeam"
-						type="line"
-						dataLabelsAndData={{ data: dataTeamHours(), week: true }}
-						title="Team Hours"
-					/>
+					{#key currentDataTeam}
+						<ChartJsGroups
+							chartID="myHoursTeam"
+							type="line"
+							dataLabelsAndData={currentDataTeam}
+							title="Team Hours"
+						/>
+					{/key}
 				</div>
 			</div>
 		{/if}
@@ -805,13 +1127,67 @@
 			class="w-full bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center mb-6"
 		>
 			<div class="w-full md:w-11/12">
-				<h2 class="text-secondary text-xl font-bold text-left mb-4 ">Employees Hours</h2>
-				<ChartJsGroups
-					chartID="myHoursEmployees"
-					type="line"
-					dataLabelsAndData={{ data: dataEmployeesHour(), week: false }}
-					title="Employees Hours"
-				/>
+				<div class="flex flex-col md:flex-row justify-between items-center relative">
+					<h2 class="text-secondary text-xl font-bold text-left mb-4 ">Employees Hours</h2>
+					<div class="flex gap-x-1 justify-end mb-4 bg-selago rounded-md w-fit p-1 ">
+						<button
+							class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
+								currentDataTotalEmployees.nameData == 'weeklyTotalEmployees'
+									? 'bg-white text-primary shadow-sm'
+									: 'text-tertiary'
+							}`}
+							on:click={() => {
+								currentDataTotalEmployees = {
+									data: dataTotalEmployeesWeekly(),
+									week: true,
+									nameData: 'weeklyTotalEmployees'
+								};
+							}}
+						>
+							Weekly
+						</button>
+						<button
+							class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
+								currentDataTotalEmployees.nameData == 'monthlyTotalEmployees'
+									? 'bg-white text-primary shadow-sm'
+									: 'text-tertiary'
+							}`}
+							on:click={() => {
+								currentDataTotalEmployees = {
+									data: dataTotalEmployeesMonthly(),
+									week: true,
+									nameData: 'monthlyTotalEmployees'
+								};
+							}}
+						>
+							Monthly
+						</button>
+						<button
+							class={`select-none  rounded-md px-4 py-1 text-[0.8rem] font-semibold  ${
+								currentDataTotalEmployees.nameData == 'yearlyTotalEmployees'
+									? 'bg-white text-primary shadow-sm'
+									: 'text-tertiary'
+							}`}
+							on:click={() => {
+								currentDataTotalEmployees = {
+									data: dataTotalEmployeesYearly(),
+									week: false,
+									nameData: 'yearlyTotalEmployees'
+								};
+							}}
+						>
+							Yearly
+						</button>
+					</div>
+				</div>
+				{#key currentDataTotalEmployees}
+					<ChartJsGroups
+						chartID="myHoursEmployees"
+						type="line"
+						dataLabelsAndData={currentDataTotalEmployees}
+						title="Employees Hours"
+					/>
+				{/key}
 			</div>
 		</div>
 	{/if}

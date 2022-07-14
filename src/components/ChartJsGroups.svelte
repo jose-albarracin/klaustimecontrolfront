@@ -245,9 +245,7 @@
 							legend: {
 								/* display: false */
 								position: 'bottom',
-								font: {
-									family: 'Plus Jakarta Sans'
-								}
+								font: 'Plus Jakarta Sans'
 							},
 							tooltip: {
 								enabled: false,

@@ -335,3 +335,144 @@ export const fetchTeamHoursWeekly = async () => {
 
 	return data.Results[0];
 };
+
+/* MONTHY */
+
+export const fetchTeamHourMonthly = async () => {
+	loading.set(true);
+	let userStore = get(user);
+	let config = {
+		//mode: 'no-cors'
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+			Authorization: `Bearer ${userStore.token}`
+		}
+	};
+	//console.log('condig', config);
+	const url = `http://localhost:3001/api/hoursWorkedTeamRangeMonthly/${userStore.body.teamAdmin}`;
+	const res = await fetch(url, config);
+
+	const data = await res.json();
+
+	//console.log('data', data);
+	if (res.ok) {
+		loading.set(false);
+	}
+
+	return data.Results[0];
+};
+
+/* YEARY */
+
+export const fetchTeamHourYearly = async () => {
+	loading.set(true);
+	let userStore = get(user);
+	let config = {
+		//mode: 'no-cors'
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+			Authorization: `Bearer ${userStore.token}`
+		}
+	};
+	//console.log('condig', config);
+	const url = `http://localhost:3001/api/hoursWorkedTeamRangeYearly/${userStore.body.teamAdmin}`;
+	const res = await fetch(url, config);
+
+	const data = await res.json();
+
+	//console.log('data', data);
+	if (res.ok) {
+		loading.set(false);
+	}
+
+	return data.Results[0];
+};
+
+/////********Hours TOTAL EMPLOYESS Worked RANGE*********////
+/* WEEKLY */
+
+export const fetchTotalEmployeesWeekly = async () => {
+	loading.set(true);
+	let userStore = get(user);
+	let config = {
+		//mode: 'no-cors'
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+			Authorization: `Bearer ${userStore.token}`
+		}
+	};
+	//console.log('condig', config);
+	const url = `http://localhost:3001/api/hoursWorkedTotalEmployeesWeekly`;
+	const res = await fetch(url, config);
+
+	const data = await res.json();
+
+	//console.log('data', data);
+	if (res.ok) {
+		loading.set(false);
+	}
+
+	return data.Results;
+};
+
+/* MONTHLY */
+
+export const fetchTotalEmployeesMonthly = async () => {
+	loading.set(true);
+	let userStore = get(user);
+	let config = {
+		//mode: 'no-cors'
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+			Authorization: `Bearer ${userStore.token}`
+		}
+	};
+	//console.log('condig', config);
+	const url = `http://localhost:3001/api/hoursWorkedTotalEmployeesMonthly`;
+	const res = await fetch(url, config);
+
+	const data = await res.json();
+
+	//console.log('data', data);
+	if (res.ok) {
+		loading.set(false);
+	}
+
+	return data.Results;
+};
+
+/* YEARLY */
+
+export const fetchTotalEmployeesYearly = async () => {
+	loading.set(true);
+	let userStore = get(user);
+	let config = {
+		//mode: 'no-cors'
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+			Authorization: `Bearer ${userStore.token}`
+		}
+	};
+	//console.log('condig', config);
+	const url = `http://localhost:3001/api/hoursWorkedTotalEmployeesYearly`;
+	const res = await fetch(url, config);
+
+	const data = await res.json();
+
+	//console.log('data', data);
+	if (res.ok) {
+		loading.set(false);
+	}
+
+	return data.Results;
+};
