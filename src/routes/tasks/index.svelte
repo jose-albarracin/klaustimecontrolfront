@@ -3,11 +3,68 @@
 	import InlineSVG from 'svelte-inline-svg';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import Table from '@components/Table.svelte';
 	let results = [];
+
+	let config = {
+		param: 'tasks',
+		paramFetch: 'tasks',
+		actions: true,
+		route: 'tasks',
+		fields: [
+			{
+				name: 'Grupo 1',
+				type: 'group',
+				align: 'start',
+				keys: [
+					{
+						type: 'title',
+						align: 'start',
+						key: 'title'
+					},
+					{
+						name: 'Start',
+						type: 'Date',
+						align: 'start',
+						key: 'start'
+					},
+					{
+						name: 'End',
+						type: 'Date',
+						align: 'start',
+						key: 'end'
+					}
+				]
+			},
+			{
+				name: 'Grupo 2',
+				type: 'group',
+				align: 'start',
+				keys: [
+					{
+						name: 'Description',
+						//type: 'Date',
+						align: 'start',
+						key: 'description'
+					},
+					{
+						name: 'Team',
+						type: 'teamTask',
+						align: 'start'
+					}
+				]
+			}
+		]
+	};
 
 	onMount(async () => {
 		results = await fetchTasks();
 	});
+
+	async function deleteItem(event) {
+		await deleteTasks(event.detail);
+		results = await fetchTasks();
+	}
 	//$: console.log('Results tasks', results);
 </script>
 
@@ -24,7 +81,8 @@
 		</a>
 
 		<div class="relative overflow-x-auto  px-0">
-			<table class="table w-full ">
+			<Table {config} {results} on:delete={deleteItem} />
+			<!-- <table class="table w-full ">
 				<tbody>
 					{#each results as item}
 						<tr
@@ -88,7 +146,7 @@
 						</tr>
 					{/each}
 				</tbody>
-			</table>
+			</table> -->
 		</div>
 	</div>
 </div>

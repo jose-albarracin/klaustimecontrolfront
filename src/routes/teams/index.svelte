@@ -3,11 +3,49 @@
 	import InlineSVG from 'svelte-inline-svg';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import Table from '@components/Table.svelte';
+
 	let results = [];
+	let config = {
+		param: 'teams',
+		paramFetch: 'teams',
+		actions: true,
+		route: 'teams',
+		fields: [
+			{
+				name: 'Grupo 1',
+				type: 'group',
+				align: 'start',
+				keys: [
+					{
+						type: 'title',
+						align: 'start',
+						key: 'title'
+					},
+					{
+						name: 'Admin',
+						type: 'joinNameAdmin',
+						align: 'start'
+						//key: 'Admin'
+					}
+				]
+			},
+			{
+				name: 'Description',
+				align: 'start',
+				key: 'description'
+			}
+		]
+	};
 
 	onMount(async () => {
 		results = await fetchTeams();
 	});
+
+	async function deleteItem(event) {
+		await deleteTeams(event.detail);
+		results = await fetchTeams();
+	}
 	//$: console.log('Results teams', results);
 </script>
 
@@ -24,7 +62,9 @@
 		</a>
 
 		<div class="relative overflow-x-auto px-0 ">
-			<table class="table w-full ">
+			<Table {config} {results} on:delete={deleteItem} />
+
+			<!-- <table class="table w-full ">
 				<tbody>
 					{#each results as item}
 						<tr>
@@ -78,7 +118,7 @@
 						</tr>
 					{/each}
 				</tbody>
-			</table>
+			</table> -->
 		</div>
 	</div>
 </div>

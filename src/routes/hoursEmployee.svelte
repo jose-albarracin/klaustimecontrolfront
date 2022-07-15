@@ -5,6 +5,7 @@
 	import { user } from '../stores/login';
 	import { createHour, fetchHour } from '../stores/hours';
 	import Inputs from '../components/inputs.svelte';
+	import Table from '@components/Table.svelte';
 
 	//VARSS
 
@@ -43,6 +44,45 @@
 		results = await response.Registers;
 	}
 
+	let config = {
+		param: 'Hour',
+		actions: false,
+		route: '',
+		fields: [
+			{
+				name: 'Grupo 1',
+				type: 'group',
+				align: 'start',
+				keys: [
+					{
+						name: 'Hours Worked',
+						type: 'titleHour',
+						align: 'start',
+						key: 'hours_worked'
+					}
+				]
+			},
+			{
+				name: 'Start',
+				type: 'Hour',
+				key: 'start',
+				align: 'center'
+			},
+			{
+				name: 'End',
+				type: 'Hour',
+				key: 'end',
+				align: 'center'
+			},
+			{
+				name: 'Date',
+				type: 'Date',
+				key: 'createdAt',
+				align: 'end'
+			}
+		]
+	};
+
 	//$: createHourLocal();
 
 	//$: console.log('Results', results);
@@ -80,7 +120,8 @@
 
 	<div class="w-full bg-white rounded-xl p-6 shadow-lg mb-6">
 		<div class="relative overflow-x-auto  ">
-			<table class="table w-full ">
+			<Table {config} {results} />
+			<!-- <table class="table w-full ">
 				<tbody>
 					{#each results as item}
 						<tr>
@@ -123,7 +164,7 @@
 						</tr>
 					{/each}
 				</tbody>
-			</table>
+			</table> -->
 		</div>
 		<div class="mt-4">
 			<p class="text-center text-2xl font-bold text-secondary">

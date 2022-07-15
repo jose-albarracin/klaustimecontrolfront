@@ -3,11 +3,56 @@
 	import InlineSVG from 'svelte-inline-svg';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import Table from '@components/Table.svelte';
 	let results = [];
+
+	let config = {
+		param: 'employees',
+		paramFetch: 'employees',
+		actions: true,
+		route: 'employees',
+		fields: [
+			{
+				name: 'Grupo 1',
+				type: 'group',
+				align: 'start',
+				keys: [
+					{
+						type: 'titleEmployees',
+						align: 'start'
+					}
+				]
+			},
+			{
+				name: 'Grupo 2',
+				type: 'group',
+				align: 'start',
+				keys: [
+					{
+						name: 'Team(s)',
+						type: 'Array',
+						//align: 'start',
+						key: 'team'
+					},
+					{
+						name: 'Role(s)',
+						type: 'Array',
+						//align: 'start',
+						key: 'roles'
+					}
+				]
+			}
+		]
+	};
 
 	onMount(async () => {
 		results = await fetchEmployees();
 	});
+
+	async function deleteItem(event) {
+		await deleteEmployees(event.detail);
+		results = await fetchEmployees();
+	}
 	//$: console.log('Results Employees', results);
 </script>
 
@@ -24,7 +69,9 @@
 			>
 		</a>
 		<div class="relative overflow-x-auto px-0">
-			<table class="table w-full ">
+			<Table {config} {results} on:delete={deleteItem} />
+
+			<!-- <table class="table w-full ">
 				<tbody>
 					{#each results as item}
 						<tr>
@@ -76,63 +123,7 @@
 						</tr>
 					{/each}
 				</tbody>
-			</table>
+			</table> -->
 		</div>
-
-		<!-- <div class="relative overflow-x-auto  shadow-md sm:rounded-md">
-			<table class="table w-full ">
-				<thead>
-					<tr>
-						<th>First Name</th>
-						<th>Last Name</th>
-						<th>Email</th>
-						<th>Team</th>
-						<th>Role</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each results as item}
-						<tr>
-							<td data-th="First Name" class="text-center"><p>{item.first_name}</p></td>
-							<td data-th="Last Name" class="text-center"><p>{item.last_name}</p></td>
-							<td data-th="Email" class="text-center"><p>{item.email}</p></td>
-							<td data-th="Team" class="text-center"
-								><p>{item.team.map((team) => team.title)}</p></td
-							>
-							<td data-th="Role" class="text-center"><p>{item.roles.map((rol) => rol.name)}</p></td>
-							<td data-th="Actions" class="text-center"
-								><div
-									class="flex justify-center
-								gap-x-3"
-								>
-									<a
-										href={`/employees/edit/${item._id}`}
-										class="flex items-center justify-center cursor-pointer"
-									>
-										<InlineSVG
-											class="text-indigo-500 w-fit h-[15px]"
-											src="/icons/pen-to-square-solid.svg"
-										/>
-									</a>
-									<div
-										on:click={async () => {
-											await deleteEmployees(item._id);
-											results = await fetchEmployees();
-										}}
-										class="flex items-center justify-center cursor-pointer"
-									>
-										<InlineSVG
-											class="text-indigo-500 w-fit h-[15px]"
-											src="/icons/trash-solid.svg"
-										/>
-									</div>
-								</div></td
-							>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div> -->
 	</div>
 </div>
