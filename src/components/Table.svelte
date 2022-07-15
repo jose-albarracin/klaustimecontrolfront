@@ -1,24 +1,12 @@
 <script>
 	import InlineSVG from 'svelte-inline-svg';
-	import { fetchHour } from '@stores/hours';
-
-	import { fetchTeamTasks, deleteTasks } from '@stores/tasks';
-	import { onMount } from 'svelte';
-
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
 
-	//let example = deleteTasks();
-
 	export let results = [];
 
 	export let config;
-	/* onMount(async ()=>{
-        results
-    }
-     
-    ) */
 
 	//$: console.log('results', results);
 	//$: console.log('config', config['param']);

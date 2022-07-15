@@ -1,17 +1,9 @@
 <script>
-	import { get } from 'svelte/store';
-	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import { user } from '../stores/login';
 	import { fetchTeamHours } from '../stores/hours';
 	import Table from '@components/Table.svelte';
 
-	//VARSS
-
-	let initialHour = {
-		start: undefined,
-		end: undefined
-	};
+	///**VARS**///
 
 	let results = [];
 	let response = '';

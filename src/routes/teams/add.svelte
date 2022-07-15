@@ -1,46 +1,30 @@
 <script>
-	import { get } from 'svelte/store';
-	import { user } from '@stores/login';
-	import { fetchTeams, createTeams } from '@stores/teams';
+	import { createTeams } from '@stores/teams';
 	import { fetchEmployees } from '@stores/employees';
 	import { onMount } from 'svelte';
 	import InlineSVG from 'svelte-inline-svg';
 	import { goto } from '$app/navigation';
 	import Inputs from '@components/inputs.svelte';
 
-	import MultiSelect from 'svelte-multiselect';
-
-	onMount(async () => {
-		employess = await fetchEmployees();
-	});
-
-	/* 	const myOptions = Option[] = [
-    { label: 'foo', value: 42 },
-    { label: 'bar', value: 69 },
-  ] */
-
 	let teamState = {};
 	let employess = [];
-	let value = [];
+
 	let unwindAdmin = {};
-	$: {
-		//unwindAdmin;
-		//console.log('unwindAdmin', unwindAdmin);
-		teamState = Object.assign(teamState, { admin: unwindAdmin[0] });
-	}
-	/* $: value = [
-		{ label: 'foo', value: 42 },
-		{ label: 'bar', value: 69 }
-	]; */
+	let employessList = [];
 	let initialState = {
 		title: undefined,
 		description: undefined,
 		admin: undefined
 	};
 
-	//$: unwindAdmin;
+	onMount(async () => {
+		employess = await fetchEmployees();
+	});
 
-	let employessList = [];
+	$: {
+		teamState = Object.assign(teamState, { admin: unwindAdmin[0] });
+	}
+
 	$: {
 		employessList = employess.map(function (e) {
 			let obj = {};
@@ -53,9 +37,7 @@
 
 	$: teamState = initialState;
 
-	let outerDivClass =
-		'shadow !appearance-none !border !border-[#e5e7eb] !rounded-lg w-full !py-2 !px-3 leading-tight';
-	$: console.log('teamState', teamState);
+	//$: console.log('teamState', teamState);
 	//$: console.log('multiSe results', value);
 	//$: console.log('Teams', teams);
 </script>
@@ -106,13 +88,6 @@
 					options={employessList}
 					bind:selectedValues={unwindAdmin}
 				/>
-				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Admin </label>
-				<MultiSelect
-					maxSelect={1}
-					{outerDivClass}
-					bind:selectedValues={unwindAdmin}
-					options={employessList}
-				/> -->
 			</div>
 
 			<div class="col-span-1 md:col-span-12 flex justify-center">

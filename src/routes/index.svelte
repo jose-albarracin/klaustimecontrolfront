@@ -1,5 +1,5 @@
 <script>
-	import { onMount, beforeUpdate, afterUpdate } from 'svelte';
+	import { onMount } from 'svelte';
 	import { createHour, fetchHour, fetchEmployeesHours, totalHoursWorked } from '@stores/hours';
 	import {
 		fetchTeamHours,
@@ -23,23 +23,20 @@
 	import ChartJsGroups from '../components/ChartJsGroups.svelte';
 	import { DateTime, Info, Interval } from 'luxon';
 
-	import { loading } from '@stores/general';
+	///**VARS**///
 
 	let userStore = get(user);
 	let isAdmin = undefined;
 	let isUser = undefined;
 	let isSuperAdmin = undefined;
 
-	////Luxon////
+	// Luxon
 
 	let yearNumber = DateTime.now().year;
 	let weekNumber = DateTime.now().weekNumber;
 	let month = DateTime.now().month;
 	let daysInMonth = DateTime.now().daysInMonth;
 
-	//let hoursExpected;
-
-	///
 	let percentageYear = 0;
 	let percentageToday = 0;
 	let percentageWeek = 0;
@@ -54,6 +51,34 @@
 	let buttonMonthly = false;
 	let buttonYearly = false;
 
+	//DataClick weekly, monthly, yearly
+	let currentData;
+	let currentDataTeam;
+	let currentDataTotalEmployees;
+
+	// Vars for percentage
+	let dataHoursYear;
+	let dataHoursToday;
+	let dataHoursWeek;
+	let dataHoursMonth;
+
+	// Vars for send CharJS one Employee
+	let dataHoursWeekly;
+	let dataHoursMonthly;
+	let dataHoursYearly;
+
+	// Vars for send CharJS Team
+	let dataTeamHoursWeekly;
+	let dataTeamHoursMonthly;
+	let dataTeamHoursYearly;
+
+	// Vars for send CharJS Total Employee
+	let dataTotalEmployeesWeekly;
+	let dataTotalEmployeesMonthly;
+	let dataTotalEmployeesYearly;
+
+	let profile;
+
 	onMount(async () => {
 		//loading.set(true);
 		profile = await fetchEmployeeProfile();
@@ -63,9 +88,9 @@
 		//loading.set(false);
 	});
 
-	$: console.log('profile');
+	//$: console.log('profile');
 
-	$: console.log('LuxonTOTAL DATA', DateTime.now());
+	//$: console.log('LuxonTOTAL DATA', DateTime.now());
 
 	fetchHour();
 
@@ -87,8 +112,10 @@
 		(item) => item.dayName !== 'Sunday' && item.dayName !== 'Saturday'
 	);
 
+	///**FUNCTIONS FOR PERCENTAGES**///
+
 	//Work Year
-	let dataHoursYear;
+
 	dataHoursYear = async () => {
 		//let res = await fetchHour();
 		//console.log('totalHoursWorked', $totalHoursWorked);
@@ -107,8 +134,7 @@
 		return { labels, data };
 	};
 
-	///Work Today
-	let dataHoursToday;
+	//Work Today
 
 	dataHoursToday = async () => {
 		let res = await fetchHour();
@@ -147,8 +173,7 @@
 		return { labels, data };
 	};
 
-	///Work Week
-	let dataHoursWeek;
+	//Work Week
 
 	dataHoursWeek = async () => {
 		let res = await fetchHour();
@@ -189,8 +214,7 @@
 		return { labels, data };
 	};
 
-	///Work Month
-	let dataHoursMonth;
+	//Work Month
 
 	dataHoursMonth = async () => {
 		let res = await fetchHour();
@@ -231,12 +255,9 @@
 		return { labels, data };
 	};
 
-	//HOURS CHART JS , WEEKLY , MONTHLY, YEARLY
+	//**HOURS CHART JS , WEEKLY , MONTHLY, YEARLY ///**FUNCTIONS FOR CHART JS , WEEKLY , MONTHLY, YEARLY ==> ONE EMPLOYEE**///
 
-	//// WEEKLY
-
-	let dataHoursWeekly;
-
+	//Weekly
 	dataHoursWeekly = async () => {
 		const dt = DateTime.fromObject({
 			weekYear: yearNumber,
@@ -296,9 +317,8 @@
 
 		return { labels, data };
 	};
-	//dataHoursWeekly();
 
-	let dataHoursMonthly;
+	//Monthly
 	dataHoursMonthly = async () => {
 		let res = await fetchEmployeesHoursMonthly();
 		let months = [];
@@ -337,7 +357,7 @@
 		return { labels, data };
 	};
 
-	let dataHoursYearly;
+	//Yearly
 	dataHoursYearly = async () => {
 		let res = await fetchEmployeesHoursYearly();
 		let years = [];
@@ -379,9 +399,8 @@
 		//console.log('meses', data);
 		return { labels, data };
 	};
-	//dataHoursYearly();
 
-	let profile;
+	///**VALIDATIONS FOR ROLES**///
 
 	$: {
 		userStore = get(user);
@@ -406,53 +425,7 @@
 		}
 	}
 
-	//$: console.log('profile', profile);
-
-	//Fetch Datas
-
-	let dataEmployeeHour;
-	$: {
-		dataEmployeeHour = async () => {
-			let res = await fetchHour();
-			//console.log('fetchTeamHours', res);
-			let dataResults = await res.Registers;
-
-			let labels = dataResults.map((item) => new Date(item.createdAt).toISOString().split('T')[0]);
-			let data = dataResults.map((item) => item.hours_worked);
-			//console.log('labels INDEX', labels);
-			return { labels, data };
-		};
-	}
-	/* 
-	let dataTeamHours;
-	$: {
-		dataTeamHours = async () => {
-			let res = await fetchTeamHours();
-
-			let dataResults = res.employeesTeam;
-			//console.log('fetchDataEmployeesHours', dataResults);
-			let labels = dataResults.map((item) => item.first_name);
-			let data = dataResults.map((item) => item.hoursWorked);
-			//console.log('labels INDEX', labels);
-			return { labels, data };
-		};
-	} */
-	let dataEmployeesHour;
-
-	dataEmployeesHour = async () => {
-		let res = await fetchEmployeesHours();
-		//console.log('res', res);
-		//let dataResults = res.employeesTeam;
-		//console.log('fetchDataEmployeesHours', dataResults);
-		let labels = res.map((item) => item.employee.first_name);
-		let data = res.map((item) => item.totalHoursWorked);
-		console.log('res', { labels, data });
-		return { labels, data };
-	};
-
-	let currentData;
-	let currentDataTeam;
-	let currentDataTotalEmployees;
+	//Load vars depending on the roles
 	$: {
 		if (!isSuperAdmin) {
 			if (isAdmin) {
@@ -468,375 +441,360 @@
 		}
 	}
 
-	//$: console.log('currentData', currentData);
+	//**HOURS CHART JS , WEEKLY , MONTHLY, YEARLY ///**FUNCTIONS FOR CHART JS , WEEKLY , MONTHLY, YEARLY ==> TEAMS**///
 
-	/* ******TEAMS****** */
+	//Weekly
 
-	//WEEKLY
-	let dataTeamHoursWeekly;
-	$: {
-		dataTeamHoursWeekly = async () => {
-			let res1 = await fetchTeamHoursWeekly();
-			let dataResults = await res1.employeesTeam;
-			//console.log('resTEAM', dataResults);
+	dataTeamHoursWeekly = async () => {
+		let res1 = await fetchTeamHoursWeekly();
+		let dataResults = await res1.employeesTeam;
+		//console.log('resTEAM', dataResults);
 
-			const dt = DateTime.fromObject({
-				weekYear: yearNumber,
-				weekNumber: weekNumber
-			});
-			const dateFromStr = dt.startOf('week');
-			const dateToStr = dt.endOf('week');
+		const dt = DateTime.fromObject({
+			weekYear: yearNumber,
+			weekNumber: weekNumber
+		});
+		const dateFromStr = dt.startOf('week');
+		const dateToStr = dt.endOf('week');
 
-			//,console.log('PLUSS', dateToStr);
+		//,console.log('PLUSS', dateToStr);
 
-			let start = dateFromStr.toFormat('yyyy-MM-dd');
-			let end = dateToStr.toFormat('yyyy-MM-dd');
+		let start = dateFromStr.toFormat('yyyy-MM-dd');
+		let end = dateToStr.toFormat('yyyy-MM-dd');
 
-			let array = [];
-			let array2 = [];
+		let array = [];
+		let array2 = [];
 
-			array = dataResults.forEach((element) => {
-				let res = element.registersHours;
+		array = dataResults.forEach((element) => {
+			let res = element.registersHours;
 
-				//console.log('res', res);
-				let days = [];
-				for (let i = 0; i <= 6; i++) {
-					let dateCurrent = dateFromStr.plus({ days: i });
-					let dateCurrentFormated = dateCurrent.toFormat('yyyy-MM-dd');
-					let value = 0;
-					let count = 0;
-					//console.log('res.length', res.length);
-					while (count < res.length) {
-						let dateResCurrent = new Date(res[count].createdAt).toISOString().split('T')[0];
+			//console.log('res', res);
+			let days = [];
+			for (let i = 0; i <= 6; i++) {
+				let dateCurrent = dateFromStr.plus({ days: i });
+				let dateCurrentFormated = dateCurrent.toFormat('yyyy-MM-dd');
+				let value = 0;
+				let count = 0;
+				//console.log('res.length', res.length);
+				while (count < res.length) {
+					let dateResCurrent = new Date(res[count].createdAt).toISOString().split('T')[0];
 
-						//console.log('UNO', dateCurrentFormated);
+					//console.log('UNO', dateCurrentFormated);
 
-						//console.log('DOS', dateResCurrent);
-						if (dateResCurrent == dateCurrentFormated) {
-							value = res[count].hours_worked ? res[count].hours_worked : 0;
-							break;
-						} else {
-							value = 0;
-							count++;
-						}
+					//console.log('DOS', dateResCurrent);
+					if (dateResCurrent == dateCurrentFormated) {
+						value = res[count].hours_worked ? res[count].hours_worked : 0;
+						break;
+					} else {
+						value = 0;
+						count++;
 					}
-					days[i] = {
-						weekDay: dateCurrent.weekdayShort,
-						hoursWorked: value
-					};
 				}
-				//console.log('days', days);
+				days[i] = {
+					weekDay: dateCurrent.weekdayShort,
+					hoursWorked: value
+				};
+			}
+			//console.log('days', days);
 
-				let labels = days
-					.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
-					.map((item) => {
-						return item.weekDay;
-					});
+			let labels = days
+				.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
+				.map((item) => {
+					return item.weekDay;
+				});
 
-				let data = days
-					.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
-					.map((item) => {
-						return item.hoursWorked;
-					});
+			let data = days
+				.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
+				.map((item) => {
+					return item.hoursWorked;
+				});
 
-				//console.log('gasgasdgsdagas', { labels, data, title: element.first_name });
-				array2.push({ labels, data, title: element.first_name });
-			});
+			//console.log('gasgasdgsdagas', { labels, data, title: element.first_name });
+			array2.push({ labels, data, title: element.first_name });
+		});
 
-			//console.log('bbbb', array2);
-			return array2;
-		};
-	}
+		//console.log('bbbb', array2);
+		return array2;
+	};
 
-	//MONTHLY
-	let dataTeamHoursMonthly;
-	$: {
-		dataTeamHoursMonthly = async () => {
-			let res1 = await fetchTeamHourMonthly();
-			let dataResults = await res1.employeesTeam;
-			let months = [];
+	//Monthly
+
+	dataTeamHoursMonthly = async () => {
+		let res1 = await fetchTeamHourMonthly();
+		let dataResults = await res1.employeesTeam;
+		let months = [];
+		let value;
+
+		//console.log('res', res1);
+		let array = [];
+		let array2 = [];
+		array = dataResults.forEach((element) => {
+			let res = element.registersHours;
+			for (let i = 0; i <= 11; i++) {
+				let countMonths = i + 1;
+				const dt = DateTime.fromObject({
+					year: yearNumber,
+					month: countMonths
+				});
+
+				let resCount = 0;
+				while (resCount < res.length) {
+					//console.log('UNO', dateCurrentFormated);
+
+					//console.log('DOS', dateResCurrent);
+					if (countMonths === res[resCount]._id) {
+						value = res[resCount].totalHoursWorked;
+						break;
+					} else {
+						value = 0;
+						resCount++;
+					}
+				}
+
+				months[i] = {
+					month: dt.monthShort,
+					totalHoursWorked: value
+				};
+			}
+
+			let labels = months.map((item) => item.month);
+			let data = months.map((item) => item.totalHoursWorked);
+
+			//console.log('labelsss', { labels, data, title: element.first_name });
+			array2.push({ labels, data, title: element.first_name });
+		});
+
+		return array2;
+	};
+
+	//Yearly
+
+	dataTeamHoursYearly = async () => {
+		let res1 = await fetchTeamHourYearly();
+		let dataResults = await res1.employeesTeam;
+		//console.log('res', res1);
+		let array = [];
+		let array2 = [];
+		array = dataResults.forEach((element) => {
+			let years = [];
 			let value;
+			let rangeAge = 2;
+			//console.log('res', res);
+			let yearsAgo = yearNumber - rangeAge;
+			let res = element.registersHours;
 
-			//console.log('res', res1);
-			let array = [];
-			let array2 = [];
-			array = dataResults.forEach((element) => {
-				let res = element.registersHours;
-				for (let i = 0; i <= 11; i++) {
-					let countMonths = i + 1;
-					const dt = DateTime.fromObject({
-						year: yearNumber,
-						month: countMonths
-					});
-
-					let resCount = 0;
-					while (resCount < res.length) {
-						//console.log('UNO', dateCurrentFormated);
-
-						//console.log('DOS', dateResCurrent);
-						if (countMonths === res[resCount]._id) {
-							value = res[resCount].totalHoursWorked;
-							break;
-						} else {
-							value = 0;
-							resCount++;
-						}
-					}
-
-					months[i] = {
-						month: dt.monthShort,
-						totalHoursWorked: value
-					};
-				}
-
-				let labels = months.map((item) => item.month);
-				let data = months.map((item) => item.totalHoursWorked);
-
-				//console.log('labelsss', { labels, data, title: element.first_name });
-				array2.push({ labels, data, title: element.first_name });
-			});
-
-			return array2;
-		};
-	}
-
-	//YEARLY
-	let dataTeamHoursYearly;
-	$: {
-		dataTeamHoursYearly = async () => {
-			let res1 = await fetchTeamHourYearly();
-			let dataResults = await res1.employeesTeam;
-			//console.log('res', res1);
-			let array = [];
-			let array2 = [];
-			array = dataResults.forEach((element) => {
-				let years = [];
-				let value;
-				let rangeAge = 2;
-				//console.log('res', res);
-				let yearsAgo = yearNumber - rangeAge;
-				let res = element.registersHours;
-
-				for (let i = 0; i <= rangeAge; i++) {
-					/* const dt = DateTime.fromObject({
+			for (let i = 0; i <= rangeAge; i++) {
+				/* const dt = DateTime.fromObject({
 				year: yearNumber
 			}); */
 
-					let resCount = 0;
-					while (resCount < res.length) {
-						//console.log('UNO', dateCurrentFormated);
+				let resCount = 0;
+				while (resCount < res.length) {
+					//console.log('UNO', dateCurrentFormated);
 
-						//console.log('DOS', dateResCurrent);
-						if (yearsAgo === res[resCount]._id) {
-							value = res[resCount].totalHoursWorked;
-							break;
-						} else {
-							value = 0;
-							resCount++;
-						}
+					//console.log('DOS', dateResCurrent);
+					if (yearsAgo === res[resCount]._id) {
+						value = res[resCount].totalHoursWorked;
+						break;
+					} else {
+						value = 0;
+						resCount++;
 					}
-
-					years[i] = {
-						year: yearsAgo,
-						totalHoursWorked: value
-					};
-					yearsAgo++;
 				}
 
-				//console.log('years', years);
+				years[i] = {
+					year: yearsAgo,
+					totalHoursWorked: value
+				};
+				yearsAgo++;
+			}
 
-				let labels = years.map((item) => item.year);
-				let data = years.map((item) => item.totalHoursWorked);
+			//console.log('years', years);
 
-				array2.push({ labels, data, title: element.first_name });
-			});
+			let labels = years.map((item) => item.year);
+			let data = years.map((item) => item.totalHoursWorked);
 
-			return array2;
-		};
-	}
+			array2.push({ labels, data, title: element.first_name });
+		});
 
-	///TOTAL EMPLOYEE
-	// WEEKLY
-	let dataTotalEmployeesWeekly;
-	$: {
-		dataTotalEmployeesWeekly = async () => {
-			let dataResults = await fetchTotalEmployeesWeekly();
-			//let dataResults = await res1.employeesTeam;
-			//console.log('resTEAM', dataResults);
+		return array2;
+	};
 
-			const dt = DateTime.fromObject({
-				weekYear: yearNumber,
-				weekNumber: weekNumber
-			});
-			const dateFromStr = dt.startOf('week');
-			const dateToStr = dt.endOf('week');
+	//**HOURS CHART JS , WEEKLY , MONTHLY, YEARLY ///**FUNCTIONS FOR CHART JS , WEEKLY , MONTHLY, YEARLY ==> TOTAL EMPLOYEES**///
 
-			//,console.log('PLUSS', dateToStr);
+	//Weekly
+	dataTotalEmployeesWeekly = async () => {
+		let dataResults = await fetchTotalEmployeesWeekly();
+		//let dataResults = await res1.employeesTeam;
+		//console.log('resTEAM', dataResults);
 
-			let start = dateFromStr.toFormat('yyyy-MM-dd');
-			let end = dateToStr.toFormat('yyyy-MM-dd');
+		const dt = DateTime.fromObject({
+			weekYear: yearNumber,
+			weekNumber: weekNumber
+		});
+		const dateFromStr = dt.startOf('week');
+		const dateToStr = dt.endOf('week');
 
-			let array = [];
-			let array2 = [];
+		//,console.log('PLUSS', dateToStr);
 
-			array = dataResults.forEach((element) => {
-				let res = element.registersHours;
+		let start = dateFromStr.toFormat('yyyy-MM-dd');
+		let end = dateToStr.toFormat('yyyy-MM-dd');
 
-				//console.log('res', res);
-				let days = [];
-				for (let i = 0; i <= 6; i++) {
-					let dateCurrent = dateFromStr.plus({ days: i });
-					let dateCurrentFormated = dateCurrent.toFormat('yyyy-MM-dd');
-					let value = 0;
-					let count = 0;
-					//console.log('res.length', res.length);
-					while (count < res.length) {
-						let dateResCurrent = new Date(res[count].createdAt).toISOString().split('T')[0];
+		let array = [];
+		let array2 = [];
 
-						//console.log('UNO', dateCurrentFormated);
+		array = dataResults.forEach((element) => {
+			let res = element.registersHours;
 
-						//console.log('DOS', dateResCurrent);
-						if (dateResCurrent == dateCurrentFormated) {
-							value = res[count].hours_worked ? res[count].hours_worked : 0;
-							break;
-						} else {
-							value = 0;
-							count++;
-						}
+			//console.log('res', res);
+			let days = [];
+			for (let i = 0; i <= 6; i++) {
+				let dateCurrent = dateFromStr.plus({ days: i });
+				let dateCurrentFormated = dateCurrent.toFormat('yyyy-MM-dd');
+				let value = 0;
+				let count = 0;
+				//console.log('res.length', res.length);
+				while (count < res.length) {
+					let dateResCurrent = new Date(res[count].createdAt).toISOString().split('T')[0];
+
+					//console.log('UNO', dateCurrentFormated);
+
+					//console.log('DOS', dateResCurrent);
+					if (dateResCurrent == dateCurrentFormated) {
+						value = res[count].hours_worked ? res[count].hours_worked : 0;
+						break;
+					} else {
+						value = 0;
+						count++;
 					}
-					days[i] = {
-						weekDay: dateCurrent.weekdayShort,
-						hoursWorked: value
-					};
 				}
-				//console.log('days', days);
+				days[i] = {
+					weekDay: dateCurrent.weekdayShort,
+					hoursWorked: value
+				};
+			}
+			//console.log('days', days);
 
-				let labels = days
-					.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
-					.map((item) => {
-						return item.weekDay;
-					});
+			let labels = days
+				.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
+				.map((item) => {
+					return item.weekDay;
+				});
 
-				let data = days
-					.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
-					.map((item) => {
-						return item.hoursWorked;
-					});
+			let data = days
+				.filter((item) => item.weekDay !== 'Sun' && item.weekDay !== 'Sat')
+				.map((item) => {
+					return item.hoursWorked;
+				});
 
-				//console.log('gasgasdgsdagas', { labels, data, title: element.first_name });
-				array2.push({ labels, data, title: element.employee.first_name });
-			});
+			//console.log('gasgasdgsdagas', { labels, data, title: element.first_name });
+			array2.push({ labels, data, title: element.employee.first_name });
+		});
 
-			console.log('bbbb', array2);
-			return array2;
-		};
-		//dataTotalEmployeesYearly();
-	}
-	// MONTHLY
-	let dataTotalEmployeesMonthly;
-	$: {
-		dataTotalEmployeesMonthly = async () => {
-			let dataResults = await fetchTotalEmployeesMonthly();
+		//console.log('bbbb', array2);
+		return array2;
+	};
 
-			let months = [];
+	//Monthly
+	dataTotalEmployeesMonthly = async () => {
+		let dataResults = await fetchTotalEmployeesMonthly();
+
+		let months = [];
+		let value;
+
+		//console.log('res', res1);
+		let array = [];
+		let array2 = [];
+		array = dataResults.forEach((element) => {
+			let res = element.registersHours;
+			for (let i = 0; i <= 11; i++) {
+				let countMonths = i + 1;
+				const dt = DateTime.fromObject({
+					year: yearNumber,
+					month: countMonths
+				});
+
+				let resCount = 0;
+				while (resCount < res.length) {
+					//console.log('UNO', dateCurrentFormated);
+
+					//console.log('DOS', dateResCurrent);
+					if (countMonths === res[resCount]._id) {
+						value = res[resCount].totalHoursWorked;
+						break;
+					} else {
+						value = 0;
+						resCount++;
+					}
+				}
+
+				months[i] = {
+					month: dt.monthShort,
+					totalHoursWorked: value
+				};
+			}
+
+			let labels = months.map((item) => item.month);
+			let data = months.map((item) => item.totalHoursWorked);
+
+			//console.log('labelsss', { labels, data, title: element.first_name });
+			array2.push({ labels, data, title: element.employee.first_name });
+		});
+
+		return array2;
+	};
+
+	//Yearly
+	dataTotalEmployeesYearly = async () => {
+		let dataResults = await fetchTotalEmployeesYearly();
+		let array = [];
+		let array2 = [];
+		array = dataResults.forEach((element) => {
+			let years = [];
 			let value;
+			let rangeAge = 2;
+			//console.log('res', res);
+			let yearsAgo = yearNumber - rangeAge;
+			let res = element.registersHours;
 
-			//console.log('res', res1);
-			let array = [];
-			let array2 = [];
-			array = dataResults.forEach((element) => {
-				let res = element.registersHours;
-				for (let i = 0; i <= 11; i++) {
-					let countMonths = i + 1;
-					const dt = DateTime.fromObject({
-						year: yearNumber,
-						month: countMonths
-					});
-
-					let resCount = 0;
-					while (resCount < res.length) {
-						//console.log('UNO', dateCurrentFormated);
-
-						//console.log('DOS', dateResCurrent);
-						if (countMonths === res[resCount]._id) {
-							value = res[resCount].totalHoursWorked;
-							break;
-						} else {
-							value = 0;
-							resCount++;
-						}
-					}
-
-					months[i] = {
-						month: dt.monthShort,
-						totalHoursWorked: value
-					};
-				}
-
-				let labels = months.map((item) => item.month);
-				let data = months.map((item) => item.totalHoursWorked);
-
-				//console.log('labelsss', { labels, data, title: element.first_name });
-				array2.push({ labels, data, title: element.employee.first_name });
-			});
-
-			return array2;
-		};
-	}
-
-	let dataTotalEmployeesYearly;
-	$: {
-		dataTotalEmployeesYearly = async () => {
-			let dataResults = await fetchTotalEmployeesYearly();
-			let array = [];
-			let array2 = [];
-			array = dataResults.forEach((element) => {
-				let years = [];
-				let value;
-				let rangeAge = 2;
-				//console.log('res', res);
-				let yearsAgo = yearNumber - rangeAge;
-				let res = element.registersHours;
-
-				for (let i = 0; i <= rangeAge; i++) {
-					/* const dt = DateTime.fromObject({
+			for (let i = 0; i <= rangeAge; i++) {
+				/* const dt = DateTime.fromObject({
 				year: yearNumber
 			}); */
 
-					let resCount = 0;
-					while (resCount < res.length) {
-						//console.log('UNO', dateCurrentFormated);
+				let resCount = 0;
+				while (resCount < res.length) {
+					//console.log('UNO', dateCurrentFormated);
 
-						//console.log('DOS', dateResCurrent);
-						if (yearsAgo === res[resCount]._id) {
-							value = res[resCount].totalHoursWorked;
-							break;
-						} else {
-							value = 0;
-							resCount++;
-						}
+					//console.log('DOS', dateResCurrent);
+					if (yearsAgo === res[resCount]._id) {
+						value = res[resCount].totalHoursWorked;
+						break;
+					} else {
+						value = 0;
+						resCount++;
 					}
-
-					years[i] = {
-						year: yearsAgo,
-						totalHoursWorked: value
-					};
-					yearsAgo++;
 				}
 
-				//console.log('years', years);
+				years[i] = {
+					year: yearsAgo,
+					totalHoursWorked: value
+				};
+				yearsAgo++;
+			}
 
-				let labels = years.map((item) => item.year);
-				let data = years.map((item) => item.totalHoursWorked);
+			//console.log('years', years);
 
-				array2.push({ labels, data, title: element.employee.first_name });
-			});
+			let labels = years.map((item) => item.year);
+			let data = years.map((item) => item.totalHoursWorked);
 
-			//console.log('array2', array2);
+			array2.push({ labels, data, title: element.employee.first_name });
+		});
 
-			return array2;
-		};
-	}
+		//console.log('array2', array2);
+
+		return array2;
+	};
 </script>
 
 <div class="container md:max-w-5xl h-max px-4 mx-auto py-6">
@@ -1116,9 +1074,9 @@
 					{#key currentDataTeam}
 						<ChartJsGroups
 							chartID="myHoursTeam"
+							push={true}
 							type="line"
 							dataLabelsAndData={currentDataTeam}
-							title="Team Hours"
 						/>
 					{/key}
 				</div>
@@ -1186,8 +1144,8 @@
 					<ChartJsGroups
 						chartID="myHoursEmployees"
 						type="line"
+						push={true}
 						dataLabelsAndData={currentDataTotalEmployees}
-						title="Employees Hours"
 					/>
 				{/key}
 			</div>

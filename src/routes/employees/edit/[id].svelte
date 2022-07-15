@@ -3,11 +3,9 @@
 	import { user } from '@stores/login';
 	import { onMount } from 'svelte';
 	import { fetchTeams } from '@stores/teams';
-	import { createEmployees, deleteEmployees, updateEmployees } from '@stores/employees';
+	import { updateEmployees } from '@stores/employees';
 	import InlineSVG from 'svelte-inline-svg';
-	import { goto } from '$app/navigation';
 	import Inputs from '@components/inputs.svelte';
-	import MultiSelect from 'svelte-multiselect';
 
 	import { loading } from '@stores/general';
 	//import MultiSelect from '@components/MultiSelect.svelte';
@@ -66,29 +64,16 @@
 
 	let employeeState = {};
 	let teams = [];
-	let value;
+	let teamList = [];
 
-	let initialState = {
-		first_name: undefined,
-		last_name: undefined,
-		email: undefined,
-		password: undefined,
-		phone: undefined,
-		team: undefined,
-		roles: undefined
-	};
+	let listRoles = ['user', 'admin'];
 
 	employeeState = results;
-	let teamList = [];
+
 	$: {
 		teamList = teams.map((te) => te.title);
 		//console.log('teamList', teamList);
 	}
-
-	let listRoles = ['user', 'admin'];
-
-	let outerDivClass =
-		'shadow !appearance-none !border !border-[#e5e7eb] !rounded-lg w-full !py-2 !px-3 leading-tight';
 
 	//$: console.log('employeeState', employeeState);
 </script>
@@ -148,8 +133,6 @@
 					options={teamList}
 					bind:selected={employeeState.team}
 				/>
-				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Team </label>
-				<MultiSelect {outerDivClass} bind:selected={employeeState.team} options={teamList} /> -->
 			</div>
 			<div class="col-span-1 md:col-span-6 mb-4">
 				<Inputs
@@ -159,9 +142,6 @@
 					options={listRoles}
 					bind:selected={employeeState.roles}
 				/>
-				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="roles"> Roles </label>
-
-				<MultiSelect {outerDivClass} bind:selected={employeeState.roles} options={listRoles} /> -->
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs

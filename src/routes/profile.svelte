@@ -3,12 +3,10 @@
 	import { user } from '../stores/login';
 	import { onMount } from 'svelte';
 	import { loading } from '@stores/general';
-	import { fade } from 'svelte/transition';
 	import Inputs from '../components/inputs.svelte';
 
-	//VARS
+	///**VARS**///
 
-	//let result;
 	let userInitial = {
 		first_name: null,
 		last_name: null,
@@ -18,11 +16,11 @@
 
 	let userState = {};
 
-	//Llamada a datos de empleado
+	//Call to employee data
 	onMount(async () => {
 		loading.set(true);
 		let userStore = get(user);
-		console.log('userStore', userStore);
+		//console.log('userStore', userStore);
 		let config = {
 			//mode: 'no-cors'
 			method: 'GET',
@@ -54,7 +52,7 @@
 		userState = results;
 	});
 
-	//Funcion para actualizar empleados
+	//Function to update employees
 	async function updateEmployee() {
 		loading.set(true);
 		let userStore = get(user);
@@ -81,11 +79,11 @@
 		//console.log(data['hours']);
 	}
 
-	//Cargue de valores iniciales para evitar keys missings
+	//Load initial values to avoid missing keys
 	$: userState = userInitial;
 
 	//$: console.log('resultados load', result);
-	$: console.log('userState', userState);
+	//$: console.log('userState', userState);
 	//$: console.log('check', check.body._id);
 </script>
 

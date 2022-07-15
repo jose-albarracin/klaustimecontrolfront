@@ -1,10 +1,9 @@
 <script>
 	import InlineSVG from 'svelte-inline-svg';
-	import { user, setStorageUser, logOutSocial } from '../stores/login';
+	import { user, setStorageUser } from '../stores/login';
 
 	import { goto } from '$app/navigation';
 	import { loading } from '@stores/general';
-	//import { isRole } from '@stores/roles';
 
 	import Inputs from '@components/inputs.svelte';
 	import Signup from '@components/SignUp.svelte';
@@ -16,14 +15,7 @@
 		password: ''
 	};
 
-	let initialObject = {
-		first_name: '',
-		last_name: '',
-		email: '',
-		password: '',
-		team: [''],
-		phone: undefined
-	};
+	let messageLogin = undefined;
 
 	const stateLoginActive = () => {
 		loginActiveView = true;
@@ -75,7 +67,7 @@
 		//console.log('res', res);
 		const data = await res.json();
 
-		console.log('dataGoogle', data);
+		//console.log('dataGoogle', data);
 
 		user.loginUser(data);
 		//isRole();
@@ -85,13 +77,12 @@
 		setStorageUser(data);
 		loading.set(false);
 	};
+
 	submitLoginGoogle();
 
 	const onKeyPressEnter = (e) => {
 		if (e.charCode === 13) submitLogin();
 	};
-
-	let messageLogin = undefined;
 
 	$: {
 		if ($user.message) {

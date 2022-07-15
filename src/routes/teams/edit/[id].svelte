@@ -5,12 +5,9 @@
 	import { fetchEmployees } from '@stores/employees';
 	import { updateTeams } from '@stores/teams';
 	import InlineSVG from 'svelte-inline-svg';
-	import { goto } from '$app/navigation';
 	import Inputs from '@components/inputs.svelte';
-	import MultiSelect from 'svelte-multiselect';
 
 	import { loading } from '@stores/general';
-	//import MultiSelect from '@components/MultiSelect.svelte';
 
 	export async function load({ fetch, params }) {
 		loading.set(true);
@@ -32,19 +29,8 @@
 
 		const data = await res.json();
 
-		/* 	let resultsFirstStep = data['Employee'];
-		let rolesTeamMap = {
-			team: resultsFirstStep.team.map((te) => te.title),
-			roles: resultsFirstStep.roles.map((rol) => rol.name)
-		}; */
-
 		//console.log('re', teamMap);
 		let results = data['Team'];
-		//console.log('reees', results);
-		/* console.log(
-			'MAP',
-			results.team.map((te) => te.title)
-		); */
 
 		//console.log('llame de nuevo', data);
 		if (res.ok) {
@@ -59,19 +45,19 @@
 </script>
 
 <script>
-	//$: console.log('seleccionados', selected);
 	export let results;
-	$: console.log('Teams', teamState);
-	onMount(async () => {
-		employess = await fetchEmployees();
-	});
 
 	let teamState = {};
 	let employess = [];
-	let value;
 
 	let unwindAdmin = [];
 	$: unwindAdmin = [adminFromResults()];
+
+	let employessList = [];
+
+	onMount(async () => {
+		employess = await fetchEmployees();
+	});
 
 	function adminFromResults() {
 		//console.log('e', e);
@@ -94,7 +80,6 @@
 
 	teamState = results;
 
-	let employessList = [];
 	$: {
 		employessList = employess.map(function (e) {
 			let obj = {};
@@ -106,9 +91,6 @@
 
 		//console.log('employessList', employessList);
 	}
-
-	let outerDivClass =
-		'shadow !appearance-none !border !border-[#e5e7eb] !rounded-lg w-full !py-2 !px-3 leading-tight';
 </script>
 
 <div class="container md:max-w-5xl px-6 mx-auto h-max">
@@ -157,13 +139,6 @@
 					options={employessList}
 					bind:selected={unwindAdmin}
 				/>
-				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Admin </label>
-				<MultiSelect
-					maxSelect={1}
-					{outerDivClass}
-					bind:selected={unwindAdmin}
-					options={employessList}
-				/> -->
 			</div>
 
 			<div class="col-span-1 md:col-span-12 flex justify-center">

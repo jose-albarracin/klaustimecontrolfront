@@ -5,12 +5,9 @@
 	import { fetchEmployees } from '@stores/employees';
 	import { updateHours } from '@stores/hours';
 	import InlineSVG from 'svelte-inline-svg';
-	import { goto } from '$app/navigation';
-	import MultiSelect from 'svelte-multiselect';
 	import Inputs from '@components/inputs.svelte';
 
 	import { loading } from '@stores/general';
-	//import MultiSelect from '@components/MultiSelect.svelte';
 
 	export async function load({ fetch, params }) {
 		loading.set(true);
@@ -52,19 +49,18 @@
 </script>
 
 <script>
-	//$: console.log('seleccionados', selected);
 	export let results;
-	//$: console.log('Hours', hoursState);
-	onMount(async () => {
-		employess = await fetchEmployees();
-	});
 
 	let hoursState = {};
 	let employess = [];
-	let value;
-
 	let unwindEmployee = [];
+	let employessList = [];
+
 	$: unwindEmployee = [employeeFromResults()];
+
+	onMount(async () => {
+		employess = await fetchEmployees();
+	});
 
 	function employeeFromResults() {
 		//console.log('resultsEmp', results.employee);
@@ -87,7 +83,6 @@
 
 	$: hoursState = results;
 
-	let employessList = [];
 	$: {
 		employessList = employess.map(function (e) {
 			let obj = {};
@@ -99,9 +94,6 @@
 
 		//console.log('employessList', employessList);
 	}
-
-	let outerDivClass =
-		'shadow !appearance-none !border !border-[#e5e7eb] !rounded-lg w-full !py-2 !px-3 leading-tight';
 </script>
 
 <div class="container px-6 mx-auto md:max-w-5xl h-max">

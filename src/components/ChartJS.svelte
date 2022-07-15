@@ -124,17 +124,8 @@
 						/* const colors = tooltip.labelColors[i]; */
 
 						const span = document.createElement('span');
-						/* span.style.color = '#B8B4CB';
-						span.style.font = '"20px'; */
-						span.classList.add('text-tertiary', 'text-[0.8rem]');
 
-						/* span.style.background = colors.backgroundColor;
-						span.style.borderColor = colors.borderColor;
-						span.style.borderWidth = '2px';
-						span.style.marginRight = '10px';
-						span.style.height = '10px';
-						span.style.width = '10px';
-						span.style.display = 'inline-block'; */
+						span.classList.add('text-tertiary', 'text-[0.8rem]');
 
 						const tr = document.createElement('tr');
 						//tr.style.backgroundColor = 'inherit';

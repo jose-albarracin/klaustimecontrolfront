@@ -1,37 +1,20 @@
 <script>
-	import { get } from 'svelte/store';
-	import { user } from '@stores/login';
-	import { fetchTasks, createTasks } from '@stores/tasks';
+	import { createTasks } from '@stores/tasks';
 	import { fetchTeams } from '@stores/teams';
 	import { onMount } from 'svelte';
 	import InlineSVG from 'svelte-inline-svg';
 	import { goto } from '$app/navigation';
 	import Inputs from '@components/inputs.svelte';
 
-	import MultiSelect from 'svelte-multiselect';
-
 	onMount(async () => {
 		teams = await fetchTeams();
 	});
 
-	/* 	const myOptions = Option[] = [
-    { label: 'foo', value: 42 },
-    { label: 'bar', value: 69 },
-  ] */
-
 	let taskState = {};
 	let teams = [];
-	let value = [];
 	let unwindTeam = {};
-	$: {
-		//unwindAdmin;
-		//console.log('unwindAdmin', unwindAdmin);
-		taskState = Object.assign(taskState, { team: unwindTeam[0] });
-	}
-	/* $: value = [
-		{ label: 'foo', value: 42 },
-		{ label: 'bar', value: 69 }
-	]; */
+	let teamsList = [];
+
 	let initialState = {
 		title: undefined,
 		description: undefined,
@@ -40,10 +23,10 @@
 		team: undefined
 	};
 
-	//$: unwindAdmin;
+	$: {
+		taskState = Object.assign(taskState, { team: unwindTeam[0] });
+	}
 
-	let teamsList = [];
-	//$: console.log('teamsList', teamsList);
 	$: {
 		teamsList = teams.map(function (e) {
 			let obj = {};
@@ -56,8 +39,8 @@
 
 	$: taskState = initialState;
 
-	let outerDivClass =
-		'shadow !appearance-none !border !border-[#e5e7eb] !rounded-lg w-full !py-2 !px-3 leading-tight';
+	//$: console.log('teamsList', teamsList);
+
 	//$: console.log('data', taskState);
 	//$: console.log('multiSe results', value);
 	//$: console.log('Teams', teams);
@@ -109,14 +92,6 @@
 					options={teamsList}
 					bind:selectedValues={unwindTeam}
 				/>
-
-				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Team </label>
-				<MultiSelect
-					maxSelect={1}
-					{outerDivClass}
-					bind:selectedValues={unwindTeam}
-					options={teamsList}
-				/> -->
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs

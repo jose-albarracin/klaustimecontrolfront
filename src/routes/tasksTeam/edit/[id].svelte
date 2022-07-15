@@ -2,7 +2,6 @@
 	import { get } from 'svelte/store';
 	import { user } from '@stores/login';
 	import { updateTasks } from '@stores/tasks';
-	import { onMount } from 'svelte';
 	export async function load({ fetch, params }) {
 		let id = params.id;
 		console.log('params', id);
@@ -45,18 +44,11 @@
 	import Inputs from '@components/inputs.svelte';
 
 	export let results;
-	$: console.log('Task', results);
 	let taskState = {};
-	let initialState = {
-		title: undefined,
-		description: undefined,
-		team: undefined,
-		start: undefined,
-		end: undefined
-	};
 
 	$: taskState = results;
 
+	//$: console.log('Task', results);
 	//$: console.log('data', taskState);
 </script>
 

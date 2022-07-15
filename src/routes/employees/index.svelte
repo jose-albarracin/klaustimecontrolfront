@@ -1,9 +1,9 @@
 <script>
 	import { fetchEmployees, deleteEmployees } from '@stores/employees';
-	import InlineSVG from 'svelte-inline-svg';
 	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
 	import Table from '@components/Table.svelte';
+
+	///**VARS**///
 	let results = [];
 
 	let config = {
@@ -70,60 +70,6 @@
 		</a>
 		<div class="relative overflow-x-auto px-0">
 			<Table {config} {results} on:delete={deleteItem} />
-
-			<!-- <table class="table w-full ">
-				<tbody>
-					{#each results as item}
-						<tr>
-							<td>
-								<div class="flex flex-col">
-									<p class="text-secondary font-bold text-base">
-										{item.first_name}
-										{item.last_name}
-									</p>
-									<p class="text-tertiary font-medium text-[0.8rem]">{item.email}</p>
-								</div>
-							</td>
-							<td>
-								<div class="flex justify-center md:justify-start">
-									<p class="text-primary font-bold text-[0.8rem] ">Team(s):&nbsp;</p>
-									<p class="text-tertiary font-medium text-[0.8rem]">
-										{item.team.map((team) => team.title)}
-									</p>
-								</div>
-								<div class="flex justify-center md:justify-start">
-									<p class="text-primary font-bold text-[0.8rem] ">Role(s):&nbsp;</p>
-									<p class="text-tertiary font-medium text-[0.8rem]">
-										{item.roles.map((rol) => rol.name)}
-									</p>
-								</div>
-							</td>
-							<td>
-								<div
-									class="flex items-center justify-center md:justify-end
-								gap-x-3"
-								>
-									<a
-										href={`/employees/edit/${item._id}`}
-										class="flex items-center justify-center cursor-pointer bg-selago text-primary px-4 py-4 rounded-full shadow-sm transition-all hover:bg-primary hover:text-white"
-									>
-										<InlineSVG class=" w-[20px] h-[20px]" src="/icons/pen-to-square-solid.svg" />
-									</a>
-									<div
-										on:click={async () => {
-											await deleteEmployees(item._id);
-											results = await fetchEmployees();
-										}}
-										class="flex items-center justify-center cursor-pointer bg-selago text-primary px-4 py-4 rounded-full shadow-sm transition-all hover:bg-primary hover:text-white"
-									>
-										<InlineSVG class=" w-[20px] h-[20px]" src="/icons/trash-solid.svg" />
-									</div>
-								</div>
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table> -->
 		</div>
 	</div>
 </div>

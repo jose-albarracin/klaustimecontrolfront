@@ -2,16 +2,13 @@
 	import { get } from 'svelte/store';
 	import { user } from '@stores/login';
 	import { createTasks } from '@stores/tasks';
-	import { onMount } from 'svelte';
 	import InlineSVG from 'svelte-inline-svg';
 	import { goto } from '$app/navigation';
 	import Inputs from '@components/inputs.svelte';
 
-	export let results;
-
+	///**VARS**///
 	let userStore = get(user);
 
-	$: console.log('Task', results);
 	let taskState = {};
 	let initialState = {
 		title: undefined,
@@ -23,7 +20,8 @@
 
 	$: taskState = initialState;
 
-	$: console.log('data', taskState);
+	//$: console.log('Task', results);
+	//$: console.log('data', taskState);
 </script>
 
 <div class="container md:max-w-5xl  px-4 mx-auto">
@@ -36,12 +34,7 @@
 		</a>
 		<h1 class="text-secondary text-3xl  font-bold ml-6">Add Task</h1>
 	</div>
-	<!-- <div class="flex justify-start items-center my-12">
-		<a href="/tasksTeam" class="flex items-center justify-center cursor-pointer">
-			<InlineSVG class="text-indigo-500 w-fit h-[25px]" src="/icons/arrow-left-solid.svg" />
-		</a>
-		<h1 class="text-secondary text-3xl  font-bold ml-6">Add Task</h1>
-	</div> -->
+
 	<div class="w-full bg-white rounded-xl p-6 shadow-sm">
 		<form
 			on:submit|preventDefault={async () => {

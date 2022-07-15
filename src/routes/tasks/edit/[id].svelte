@@ -5,13 +5,8 @@
 	import { fetchTeams } from '@stores/teams';
 	import { updateTasks } from '@stores/tasks';
 	import InlineSVG from 'svelte-inline-svg';
-	import { goto } from '$app/navigation';
-
 	import Inputs from '@components/inputs.svelte';
-	import MultiSelect from 'svelte-multiselect';
-
 	import { loading } from '@stores/general';
-	//import MultiSelect from '@components/MultiSelect.svelte';
 
 	export async function load({ fetch, params }) {
 		loading.set(true);
@@ -54,23 +49,20 @@
 </script>
 
 <script>
-	//$: console.log('seleccionados', selected);
 	export let results;
-	//$: console.log('Hours', results);
+
+	let taskState = {};
+	let teams = [];
+	let teamsList = [];
+	let unwindTeam = [];
+
+	$: unwindTeam = [teamFromResults()];
+
 	onMount(async () => {
 		teams = await fetchTeams();
 	});
 
-	let taskState = {};
-	let teams = [];
-	let value;
-
-	let unwindTeam = [];
-	$: unwindTeam = [teamFromResults()];
-
-	//	$: console.log(' unwindTeam ', unwindTeam);
 	function teamFromResults() {
-		//console.log('resultsEmp', results.employee);
 		let obj = {};
 		obj['label'] = results.team.title;
 		obj['value'] = results.team._id;
@@ -84,12 +76,8 @@
 		});
 	}
 
-	//$: console.log('unwindAdmin', unwindAdmin);
-
 	$: taskState = results;
 
-	let teamsList = [];
-	//$: console.log('teamsList', teamsList);
 	$: {
 		teamsList = teams.map(function (e) {
 			let obj = {};
@@ -99,8 +87,9 @@
 			return obj;
 		});
 	}
-	let outerDivClass =
-		'shadow !appearance-none !border !border-[#e5e7eb] !rounded-lg w-full !py-2 !px-3 leading-tight';
+
+	//$: console.log('unwindAdmin', unwindAdmin);
+	//$: console.log('teamsList', teamsList);
 </script>
 
 <div class="container px-6 mx-auto md:max-w-5xl h-max">

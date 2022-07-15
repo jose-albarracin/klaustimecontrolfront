@@ -8,15 +8,10 @@
 	import { goto } from '$app/navigation';
 	import Inputs from '@components/inputs.svelte';
 
-	//import MultiSelect from 'svelte-multiselect';
-
-	onMount(async () => {
-		teams = await fetchTeams();
-	});
+	///**VARS**///
 
 	let employeeState = {};
 	let teams = [];
-	let value;
 	let initialState = {
 		first_name: undefined,
 		last_name: undefined,
@@ -26,18 +21,19 @@
 		team: undefined,
 		roles: undefined
 	};
+	let listRoles = ['user', 'admin'];
 
 	let teamList = [];
 	$: {
 		teamList = teams.map((te) => te.title);
 		//console.log('teamList', teamList);
 	}
-	let listRoles = ['user', 'admin'];
 
 	$: employeeState = initialState;
 
-	let outerDivClass =
-		'shadow !appearance-none !border !border-[#e5e7eb] !rounded-lg w-full !py-2 !px-3 leading-tight';
+	onMount(async () => {
+		teams = await fetchTeams();
+	});
 	//$: console.log('employeeState', employeeState);
 	//$: console.log('multiSe results', value);
 	//$: console.log('Teams', teams);
@@ -98,8 +94,6 @@
 					options={teamList}
 					bind:selected={employeeState.team}
 				/>
-				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Team </label>
-				<MultiSelect {outerDivClass} bind:selected={employeeState.team} options={teamList} /> -->
 			</div>
 			<div class="col-span-1 md:col-span-6 mb-4">
 				<Inputs
@@ -109,9 +103,6 @@
 					options={listRoles}
 					bind:selected={employeeState.roles}
 				/>
-				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="roles"> Roles </label>
-
-				<MultiSelect {outerDivClass} bind:selected={employeeState.roles} options={listRoles} /> -->
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs

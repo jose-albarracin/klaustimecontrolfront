@@ -1,13 +1,10 @@
 <script>
-	import { get } from 'svelte/store';
-	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import { user } from '../stores/login';
 	import { createHour, fetchHour } from '../stores/hours';
 	import Inputs from '../components/inputs.svelte';
 	import Table from '@components/Table.svelte';
 
-	//VARSS
+	///**VARS**///
 
 	let initialHour = {
 		start: undefined,
@@ -16,34 +13,9 @@
 
 	let stateHour = initialHour;
 
-	let results = [];
 	let response = '';
 
-	//$: console.log('stateHour', stateHour);
-
-	onMount(async () => {
-		response = await fetchHour();
-
-		if (response) {
-			results = await response.Registers;
-		} else {
-			results = [];
-		}
-	});
-
-	/* 	async function fetchHourLocal() {
-		console.log('hola?=');
-		fetchHour();
-	} */
-
-	async function createHourLocal() {
-		await createHour(stateHour);
-		stateHour = {};
-
-		response = await fetchHour();
-		results = await response.Registers;
-	}
-
+	let results = [];
 	let config = {
 		param: 'Hour',
 		actions: false,
@@ -82,6 +54,26 @@
 			}
 		]
 	};
+
+	//$: console.log('stateHour', stateHour);
+
+	onMount(async () => {
+		response = await fetchHour();
+
+		if (response) {
+			results = await response.Registers;
+		} else {
+			results = [];
+		}
+	});
+
+	async function createHourLocal() {
+		await createHour(stateHour);
+		stateHour = {};
+
+		response = await fetchHour();
+		results = await response.Registers;
+	}
 
 	//$: createHourLocal();
 

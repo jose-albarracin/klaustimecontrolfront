@@ -11,7 +11,7 @@
 	export let dataLabelsAndData;
 	export let type;
 	export let chartID;
-	export let title;
+	//export let title;
 	export let percentage;
 	export let push;
 	//export let week;
@@ -34,10 +34,10 @@
 			//console.log('dentro de chart', await dataLabelsAndData);
 			//console.log('resultsFinal', await dataLabelsAndData);
 			let resultsFinal = await dataLabelsAndData.data;
-			console.log('resultsFinal', resultsFinal);
+			//console.log('resultsFinal', resultsFinal);
 			/* if (resultsFinal) { */
 			labels = resultsFinal[0].labels;
-			console.log('labels from Chart', labels);
+			//console.log('labels from Chart', labels);
 			//data = resultsFinal.data;
 			let dynamicColors = function () {
 				let r = Math.floor(Math.random() * 255);

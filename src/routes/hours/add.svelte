@@ -1,46 +1,33 @@
 <script>
-	import { get } from 'svelte/store';
-	import { user } from '@stores/login';
-	import { fetchHours, createHours } from '@stores/hours';
+	import { createHours } from '@stores/hours';
 	import { fetchEmployees } from '@stores/employees';
 	import { onMount } from 'svelte';
 	import InlineSVG from 'svelte-inline-svg';
 	import { goto } from '$app/navigation';
 	import Inputs from '@components/inputs.svelte';
 
-	import MultiSelect from 'svelte-multiselect';
-
 	onMount(async () => {
 		employess = await fetchEmployees();
 	});
 
-	/* 	const myOptions = Option[] = [
-    { label: 'foo', value: 42 },
-    { label: 'bar', value: 69 },
-  ] */
-
 	let hoursState = {};
 	let employess = [];
-	let value = [];
+
 	let unwindAdmin = {};
-	$: {
-		//unwindAdmin;
-		//console.log('unwindAdmin', unwindAdmin);
-		hoursState = Object.assign(hoursState, { employee: unwindAdmin[0] });
-	}
-	/* $: value = [
-		{ label: 'foo', value: 42 },
-		{ label: 'bar', value: 69 }
-	]; */
 	let initialState = {
 		employee: undefined,
 		start: undefined,
 		end: undefined
 	};
 
+	let employessList = [];
+
+	$: {
+		hoursState = Object.assign(hoursState, { employee: unwindAdmin[0] });
+	}
+
 	//$: unwindAdmin;
 
-	let employessList = [];
 	$: {
 		employessList = employess.map(function (e) {
 			let obj = {};
@@ -53,9 +40,7 @@
 
 	$: hoursState = initialState;
 
-	let outerDivClass =
-		'shadow !appearance-none !border !border-[#e5e7eb] !rounded-lg w-full !py-2 !px-3 leading-tight';
-	$: console.log('hoursState', hoursState);
+	//$: console.log('hoursState', hoursState);
 	//$: console.log('multiSe results', value);
 	//$: console.log('Teams', teams);
 </script>
@@ -87,14 +72,6 @@
 					options={employessList}
 					bind:selectedValues={unwindAdmin}
 				/>
-
-				<!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="team"> Employee </label>
-				<MultiSelect
-					maxSelect={1}
-					{outerDivClass}
-					bind:selectedValues={unwindAdmin}
-					options={employessList}
-				/> -->
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs

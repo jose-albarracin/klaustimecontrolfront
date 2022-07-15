@@ -2,7 +2,7 @@
 	import InlineSVG from 'svelte-inline-svg';
 	import { page } from '$app/stores';
 	import { fetchHour, fetchTeamHours, countMyHours, countTeamHours } from '@stores/hours';
-	import { each } from 'svelte/internal';
+
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
 	import { user, logOutSocial } from '../stores/login';
@@ -12,6 +12,8 @@
 	let isUser = undefined;
 	let isSuperAdmin = undefined;
 	let open = false;
+
+	let menu = [];
 
 	let urlParam1;
 	let urlParam2;
@@ -59,17 +61,7 @@
 			}
 		}
 	}
-	/* $: isAdmin = get(admin);
-	$: isUser = get(users);
-	$: isSuperAdmin = get(superAdmin); */
-	//console.log('isAdminBav', isAdmin);
 
-	/* 	$: console.log('isAdmin', isAdmin);
-	$: console.log('isUser', isUser);
-		$: console.log('isSuperAdmin', isSuperAdmin); */
-	//$: console.log('estado admin', isAdmin);
-
-	let menu = [];
 	$: menu = [
 		{
 			title: 'Home',
