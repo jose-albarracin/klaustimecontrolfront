@@ -94,7 +94,7 @@
 
 	//$: console.log('LuxonTOTAL DATA', DateTime.now());
 
-	fetchHour();
+	$: fetchHour();
 
 	//console.log('Mes :', DateTime.now().month);
 	let allDays = [];
@@ -145,7 +145,7 @@
 
 		let hoursExpected = 8;
 		let registers = res ? await res.Registers : undefined;
-		//console.log('registers ', registers);
+		console.log('registers ', registers);
 
 		let labels = ['start', 'end'];
 		let data = [];
@@ -153,8 +153,11 @@
 			? registers
 					.map((item) => {
 						let now = DateTime.now().toFormat('yyyy-MM-dd');
-						let dateCurrent = DateTime.fromISO(item.createdAt).toFormat('yyyy-MM-dd');
+						let dateCurrent = DateTime.fromISO(item.createdAt).toUTC().toFormat('yyyy-MM-dd');
+						//console.log('----------------------------');
 						//console.log('now', now);
+						//console.log('createdAt', item.createdAt);
+						//console.log('DateTime.fromISO', DateTime.fromISO(item.createdAt).toUTC());
 						//console.log('dateCurrentTODAY', dateCurrent);
 						if (now == dateCurrent) {
 							return item.hours_worked;
@@ -239,7 +242,7 @@
 						}
 					})
 					.map((item) => item.hours_worked)
-					.reduce((a, b) => a + b)
+					.reduce((a, b) => a + b, 0)
 			: 0;
 		hoursMonth = results;
 		//console.log('results Month', results);

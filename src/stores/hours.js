@@ -60,6 +60,8 @@ export const fetchHour = async () => {
 	if (data.Results[0]) {
 		totalHoursWorked.set(data.Results[0].totalHoursWorked);
 		countMyHours.set(data.Results[0].Registers.length);
+	} else {
+		totalHoursWorked.set(0);
 	}
 
 	if (res.ok) {
