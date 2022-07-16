@@ -20,7 +20,7 @@ export const fetchProfile = async () => {
 	};
 	///console.log('VERIFY', userStore.body._id);
 
-	const url = `http://localhost:3001/api/employees/`;
+	const url = `http://localhost:3002/api/employees/`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();

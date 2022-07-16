@@ -23,7 +23,7 @@ export const createHour = async (stateHour) => {
 		body: JSON.stringify(Object.assign(stateHour, { employee: userStore.body._id }))
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3001/api/hours`;
+	const url = `http://localhost:3002/api/hours`;
 	const res = await fetch(url, config);
 	if (res.ok) {
 		loading.set(false);
@@ -47,7 +47,7 @@ export const fetchHour = async () => {
 		}
 	};
 	//console.log('id', id);
-	const url = `http://localhost:3001/api/hoursWorkedEmployees/${userStore.body._id}`;
+	const url = `http://localhost:3002/api/hoursWorkedEmployees/${userStore.body._id}`;
 	//console.log('url', url);
 	//console.log('url', url);
 	//console.log('config', config);
@@ -87,7 +87,7 @@ export const fetchTeamHours = async () => {
 		}
 	};
 	//console.log('userStore.body.teamAdmin', userStore.body.teamAdmin);
-	const url = `http://localhost:3001/api/hoursWorkedTeam/${userStore.body.teamAdmin}`;
+	const url = `http://localhost:3002/api/hoursWorkedTeam/${userStore.body.teamAdmin}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -114,7 +114,7 @@ export const fetchHours = async () => {
 			Authorization: `Bearer ${userStore.token}`
 		}
 	};
-	const url = 'http://localhost:3001/api/hours';
+	const url = 'http://localhost:3002/api/hours';
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -142,7 +142,7 @@ export const createHours = async (stateHours) => {
 		},
 		body: JSON.stringify(stateHours)
 	};
-	const url = 'http://localhost:3001/api/hours';
+	const url = 'http://localhost:3002/api/hours';
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -168,7 +168,7 @@ export const updateHours = async (stateHours, id) => {
 
 		body: JSON.stringify(stateHours)
 	};
-	const url = `http://localhost:3001/api/hours/${id}`;
+	const url = `http://localhost:3002/api/hours/${id}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -193,7 +193,7 @@ export const deleteHours = async (id) => {
 			Authorization: `Bearer ${userStore.token}`
 		}
 	};
-	const url = `http://localhost:3001/api/hours/${id}`;
+	const url = `http://localhost:3002/api/hours/${id}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -220,7 +220,7 @@ export const fetchEmployeesHours = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3001/api/hoursWorkedEmployees`;
+	const url = `http://localhost:3002/api/hoursWorkedEmployees`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -246,7 +246,7 @@ export const fetchEmployeesHoursWeekly = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3001/api/hoursWorkedEmployeesRangeWeekly/${userStore.body._id}`;
+	const url = `http://localhost:3002/api/hoursWorkedEmployeesRangeWeekly/${userStore.body._id}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -274,7 +274,7 @@ export const fetchEmployeesHoursMonthly = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3001/api/hoursWorkedEmployeesRangeMonths/${userStore.body._id}`;
+	const url = `http://localhost:3002/api/hoursWorkedEmployeesRangeMonths/${userStore.body._id}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -299,7 +299,7 @@ export const fetchEmployeesHoursYearly = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3001/api/hoursWorkedEmployeesRangeYear/${userStore.body._id}`;
+	const url = `http://localhost:3002/api/hoursWorkedEmployeesRangeYear/${userStore.body._id}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -325,7 +325,7 @@ export const fetchTeamHoursWeekly = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3001/api/hoursWorkedTeamRangeWeekly/${userStore.body.teamAdmin}`;
+	const url = `http://localhost:3002/api/hoursWorkedTeamRangeWeekly/${userStore.body.teamAdmin}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -353,7 +353,7 @@ export const fetchTeamHourMonthly = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3001/api/hoursWorkedTeamRangeMonthly/${userStore.body.teamAdmin}`;
+	const url = `http://localhost:3002/api/hoursWorkedTeamRangeMonthly/${userStore.body.teamAdmin}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -381,7 +381,7 @@ export const fetchTeamHourYearly = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3001/api/hoursWorkedTeamRangeYearly/${userStore.body.teamAdmin}`;
+	const url = `http://localhost:3002/api/hoursWorkedTeamRangeYearly/${userStore.body.teamAdmin}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -410,7 +410,7 @@ export const fetchTotalEmployeesWeekly = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3001/api/hoursWorkedTotalEmployeesWeekly`;
+	const url = `http://localhost:3002/api/hoursWorkedTotalEmployeesWeekly`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -438,7 +438,7 @@ export const fetchTotalEmployeesMonthly = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3001/api/hoursWorkedTotalEmployeesMonthly`;
+	const url = `http://localhost:3002/api/hoursWorkedTotalEmployeesMonthly`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -466,7 +466,7 @@ export const fetchTotalEmployeesYearly = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3001/api/hoursWorkedTotalEmployeesYearly`;
+	const url = `http://localhost:3002/api/hoursWorkedTotalEmployeesYearly`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();

@@ -23,7 +23,7 @@
 			}
 		};
 		//console.log('condig', config);
-		const urlData = `http://localhost:3001/api/tasks/${id}`;
+		const urlData = `http://localhost:3002/api/tasks/${id}`;
 		const res = await fetch(urlData, config);
 
 		const data = await res.json();

@@ -53,7 +53,7 @@ export let logOutSocial = async () => {
 			//'Access-Control-Allow-Origin': '*'
 		}
 	};
-	const url = 'http://localhost:3001/auth/logout';
+	const url = 'http://localhost:3002/auth/logout';
 	//console.log('url', url);
 	const res = await fetch(url, config);
 

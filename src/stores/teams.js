@@ -15,7 +15,7 @@ export const fetchTeams = async () => {
 			Authorization: `Bearer ${userStore.token}`
 		}
 	};
-	const url = 'http://localhost:3001/api/teams';
+	const url = 'http://localhost:3002/api/teams';
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -43,7 +43,7 @@ export const createTeams = async (stateTeam) => {
 		},
 		body: JSON.stringify(stateTeam)
 	};
-	const url = 'http://localhost:3001/api/teams';
+	const url = 'http://localhost:3002/api/teams';
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -69,7 +69,7 @@ export const updateTeams = async (stateTeam, id) => {
 
 		body: JSON.stringify(stateTeam)
 	};
-	const url = `http://localhost:3001/api/teams/${id}`;
+	const url = `http://localhost:3002/api/teams/${id}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -94,7 +94,7 @@ export const deleteTeams = async (id) => {
 			Authorization: `Bearer ${userStore.token}`
 		}
 	};
-	const url = `http://localhost:3001/api/teams/${id}`;
+	const url = `http://localhost:3002/api/teams/${id}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();

@@ -33,7 +33,7 @@
 			},
 			body: JSON.stringify(userLogin)
 		};
-		const url = 'http://localhost:3001/api/login';
+		const url = 'http://localhost:3002/api/login';
 		const res = await fetch(url, config);
 
 		const data = await res.json();
@@ -60,7 +60,7 @@
 				//'Access-Control-Allow-Origin': '*'
 			}
 		};
-		const url = 'http://localhost:3001/auth/login/success';
+		const url = 'http://localhost:3002/auth/login/success';
 		//console.log('url', url);
 		const res = await fetch(url, config);
 
@@ -144,7 +144,7 @@
 								class="bg-red-600 hover:bg-red-700 w-1/2 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center my-3"
 								type="submit"
 								on:click={async () => {
-									const urlD = 'http://localhost:3001/auth/google';
+									const urlD = 'http://localhost:3002/auth/google';
 									window.open(urlD, '_self');
 									//submitLoginGoogle();
 								}}
@@ -158,7 +158,7 @@
 								class="bg-blue-600 hover:bg-blue-700 w-1/2 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center my-3"
 								type="submit"
 								on:click={async () => {
-									const urlD = 'http://localhost:3001/auth/facebook';
+									const urlD = 'http://localhost:3002/auth/facebook';
 									window.open(urlD, '_self');
 									//submitLoginGoogle();
 								}}

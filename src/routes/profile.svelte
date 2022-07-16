@@ -32,7 +32,7 @@
 		};
 		//console.log('VERIFY', userStore.body._id);
 
-		const url = `http://localhost:3001/api/employees/${userStore.body._id}`;
+		const url = `http://localhost:3002/api/employees/${userStore.body._id}`;
 		const res = await fetch(url, config);
 
 		const data = await res.json();
@@ -68,7 +68,7 @@
 			body: JSON.stringify(userState)
 		};
 		console.log('condig', config);
-		const url = `http://localhost:3001/api/employees/${userStore.body._id}`;
+		const url = `http://localhost:3002/api/employees/${userStore.body._id}`;
 		const res = await fetch(url, config);
 
 		const data = await res.json();
