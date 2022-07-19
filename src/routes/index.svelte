@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { fetchTeamTasksInCharged } from '@stores/tasks';
 	import { createHour, fetchHour, fetchEmployeesHours, totalHoursWorked } from '@stores/hours';
 	import {
 		fetchTeamHours,
@@ -79,6 +80,8 @@
 	let dataTotalEmployeesMonthly;
 	let dataTotalEmployeesYearly;
 
+	let isTask = {};
+
 	let profile;
 
 	onMount(async () => {
@@ -88,6 +91,17 @@
 		profile = await profile.first_name;
 
 		//loading.set(false);
+
+		userStore = get(user);
+		//console.log('user', userData.body._id);
+		isTask = await fetchTeamTasksInCharged(userStore.body._id);
+
+		/* if (isTask) {
+			//console.log('HAY TAREAS');
+			//console.log(isTask);
+		} else {
+			console.log('NO HAY TAREAS');
+		} */
 	});
 
 	//$: console.log('profile');
@@ -397,6 +411,8 @@
 	dataTotalEmployeesWeekly = async () => {
 		let dataResults = await fetchTotalEmployeesWeekly();
 
+		console.log('dataResults', dataResults);
+
 		let array = [];
 		let array2 = [];
 
@@ -611,6 +627,43 @@
 					<p class="text-3xl md:text-2xl font-bold text-secondary">{$totalHoursWorked}h</p>
 				</div>
 			</div>
+		</div>
+
+		<div
+			class="w-full bg-white rounded-xl p-6 flex flex-col items-center justify-center mb-12 shadow-lg"
+		>
+			<h2 class="text-secondary text-center text-xl font-bold pb-4">Currently Assigned Task</h2>
+			{#if isTask}
+				<div>
+					<p class="text-primary text-center font-semibold text-base pb-2">
+						{isTask.title ? isTask.title : ''}
+					</p>
+					<p class="text-tertiary text-center font-semibold text-sm pb-2">Description:</p>
+					<p class="text-tertiary text-center font-medium text-sm pb-2">
+						{isTask.description ? isTask.description : ''}
+					</p>
+					<div class="flex flex-col md:flex-row gap-x-3">
+						<p class="text-primary text-center font-bold text-sm pb-2">
+							Start:&nbsp;
+							<span class="text-tertiary text-center font-medium text-sm pb-2">
+								{isTask.start ? new Date(isTask.start).toISOString().split('T')[0] : ''}
+							</span>
+						</p>
+						<p class="text-primary text-center font-bold text-sm pb-2">
+							End:&nbsp;
+							<span class="text-tertiary text-center font-medium text-sm pb-2">
+								{isTask.end ? new Date(isTask.end).toISOString().split('T')[0] : ''}
+							</span>
+						</p>
+					</div>
+				</div>
+			{:else}
+				<div class="flex justify-center">
+					<p class="text-tertiary text-center font-medium text-sm pb-2">
+						You have no assigned tasks
+					</p>
+				</div>
+			{/if}
 		</div>
 
 		<div

@@ -41,6 +41,12 @@
 				//type: 'Date',
 				align: 'start',
 				key: 'description'
+			},
+			{
+				name: 'In Charge',
+				type: 'joinNameEmployeeInCharged',
+				align: 'start'
+				//key: 'description'
 			}
 		]
 	};
@@ -54,7 +60,7 @@
 		results = await fetchTeamTasks();
 	}
 
-	//$: console.log('Results Taks', results);
+	$: console.log('Results Taks', results);
 </script>
 
 <div class="container md:max-w-5xl px-4 mx-auto">

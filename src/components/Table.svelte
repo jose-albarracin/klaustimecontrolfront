@@ -96,6 +96,21 @@
 													}`}
 												</p>
 											</div>
+										{:else if subfields.type === 'joinNameEmployeeInCharged'}
+											<div
+												class={`flex justify-center md:justify-${
+													subfields.align ? subfields.align : 'start'
+												}`}
+											>
+												<p class="text-primary font-bold text-[0.8rem]">
+													{subfields.name}:&nbsp;
+												</p>
+												<p class="text-tertiary font-medium text-[0.8rem]">
+													{`${item.employeeInCharge ? item.employeeInCharge[0].first_name : ''} ${
+														item.employeeInCharge ? item.employeeInCharge[0].last_name : ''
+													}`}
+												</p>
+											</div>
 										{:else if subfields.type === 'Hour'}
 											<div
 												class={`flex justify-center md:justify-${
@@ -154,6 +169,29 @@
 									<p class="text-primary font-bold text-[0.8rem]">{fields.name}:&nbsp;</p>
 									<p class="text-tertiary font-medium text-[0.8rem]">
 										{item[fields.key]}h
+									</p>
+								</div>
+							{:else if fields.type === 'joinNameEmployeeInCharged'}
+								<div
+									class={`flex justify-center md:justify-${fields.align ? fields.align : 'start'}`}
+								>
+									<p class="text-primary font-bold text-[0.8rem]">
+										{fields.name}:&nbsp;
+									</p>
+									<p class="text-tertiary font-medium text-[0.8rem]">
+										{`${item.employeeInCharge[0] ? item.employeeInCharge[0].first_name : ''} ${
+											item.employeeInCharge[0] ? item.employeeInCharge[0].last_name : ''
+										}`}
+									</p>
+								</div>
+							{:else if fields.type === 'twoLevels'}
+								<div
+									class={`flex justify-center md:justify-${fields.align ? fields.align : 'start'}`}
+								>
+									<p class="text-primary font-bold text-[0.8rem] ">
+										{fields.name}:&nbsp;<span class="text-tertiary font-medium text-[0.8rem]">
+											{item[fields.key] ? item[fields.key][fields.key2] : ''}
+										</span>
 									</p>
 								</div>
 							{:else}

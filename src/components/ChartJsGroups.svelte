@@ -46,14 +46,25 @@
 				return 'rgb(' + r + ',' + g + ',' + b + ')';
 			};
 
-			resultsFinal.forEach((element) => {
+			let colorManual = [
+				'#00ffff',
+				'#f08080',
+				'#0000ff',
+				'#dc143c',
+				'#8b008b',
+				'#ff8c00',
+				'#ff1493',
+				'#ffd700'
+			];
+
+			resultsFinal.forEach((element, i) => {
 				let colorAxis = dynamicColors;
 				//console.log('colorAxis', colorAxis());
 				let obj = {
 					label: element.title,
 					data: element.data,
 					//fill: true,
-					borderColor: colorAxis(),
+					borderColor: colorManual[i],
 
 					pointBorderColor: '#fff',
 					pointBorderWidth: 4,
@@ -245,7 +256,12 @@
 							legend: {
 								/* display: false */
 								position: 'bottom',
-								font: 'Plus Jakarta Sans'
+								font: '16px',
+								labels: {
+									font: {
+										family: 'Plus Jakarta Sans'
+									}
+								}
 							},
 							tooltip: {
 								enabled: false,

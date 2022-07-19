@@ -1,8 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
 	import { createHour, fetchHour } from '../stores/hours';
+	import { fetchTeamTasksInCharged } from '@stores/tasks';
 	import Inputs from '../components/inputs.svelte';
 	import Table from '@components/Table.svelte';
+	import { user } from '@stores/login';
+	import { get } from 'svelte/store';
 
 	///**VARS**///
 
@@ -14,6 +17,9 @@
 	let stateHour = initialHour;
 
 	let response = '';
+	let isTask = {};
+
+	let userData = {};
 
 	let results = [];
 	let config = {
@@ -47,6 +53,13 @@
 				align: 'center'
 			},
 			{
+				name: 'Task',
+				type: 'twoLevels',
+				key: 'task',
+				key2: 'title',
+				align: 'start'
+			},
+			{
 				name: 'Date',
 				type: 'Date',
 				key: 'createdAt',
@@ -55,8 +68,11 @@
 		]
 	};
 
-	//$: console.log('stateHour', stateHour);
+	$: stateHour = Object.assign(stateHour, {
+		...(isTask && { task: isTask._id })
+	});
 
+	//$: console.log('stateHour', stateHour);
 	onMount(async () => {
 		response = await fetchHour();
 
@@ -64,6 +80,16 @@
 			results = await response.Registers;
 		} else {
 			results = [];
+		}
+		userData = get(user);
+		//console.log('user', userData.body._id);
+		isTask = await fetchTeamTasksInCharged(userData.body._id);
+
+		if (isTask) {
+			console.log('HAY TAREAS');
+			console.log(isTask);
+		} else {
+			console.log('NO HAY TAREAS');
 		}
 	});
 
@@ -77,7 +103,7 @@
 
 	//$: createHourLocal();
 
-	//$: console.log('Results', results);
+	$: console.log('Results', results);
 </script>
 
 <div class="container md:max-w-5xl px-6 mx-auto h-max">
@@ -85,29 +111,38 @@
 		<h1 class="text-secondary text-3xl  font-bold">My Hours</h1>
 	</div>
 	<div class="w-full bg-white rounded-xl p-6 mb-6 shadow-lg">
-		<form
-			on:submit|preventDefault={createHourLocal}
-			class="grid grid-cols-1 md:grid-cols-12 gap-x-8"
-		>
-			<div class="col-span-1 md:col-span-6">
-				<Inputs
-					label="Start"
-					name="start"
-					type="number"
-					required={true}
-					bind:value={stateHour.start}
-				/>
+		{#if isTask}
+			<form
+				on:submit|preventDefault={createHourLocal}
+				class="grid grid-cols-1 md:grid-cols-12 gap-x-8"
+			>
+				<div class="col-span-1 md:col-span-6">
+					<Inputs
+						label="Start"
+						name="start"
+						type="number"
+						required={true}
+						bind:value={stateHour.start}
+					/>
+				</div>
+				<div class="col-span-1 md:col-span-6">
+					<Inputs label="End" name="end" type="number" required={true} bind:value={stateHour.end} />
+				</div>
+				<div class="col-span-1 md:col-span-12 flex justify-center">
+					<button
+						class="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded-lg"
+						type="submit">Add</button
+					>
+				</div>
+			</form>
+		{:else}
+			<div class="flex justify-center">
+				<span class="text-base text-primary font-bold text-center">
+					"Currently you do not have assigned tasks, therefore you will not be able to record hours
+					worked"
+				</span>
 			</div>
-			<div class="col-span-1 md:col-span-6">
-				<Inputs label="End" name="end" type="number" required={true} bind:value={stateHour.end} />
-			</div>
-			<div class="col-span-1 md:col-span-12 flex justify-center">
-				<button
-					class="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded-lg"
-					type="submit">Add</button
-				>
-			</div>
-		</form>
+		{/if}
 	</div>
 
 	<div class="w-full bg-white rounded-xl p-6 shadow-lg mb-6">

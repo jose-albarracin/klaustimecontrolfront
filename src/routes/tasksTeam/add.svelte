@@ -1,27 +1,56 @@
 <script>
 	import { get } from 'svelte/store';
 	import { user } from '@stores/login';
-	import { createTasks } from '@stores/tasks';
+	import { createTasks, fetchTeamTasks } from '@stores/tasks';
 	import InlineSVG from 'svelte-inline-svg';
 	import { goto } from '$app/navigation';
 	import Inputs from '@components/inputs.svelte';
+	import { fetchTeamHours } from '@stores/hours';
+	import { onMount } from 'svelte';
 
 	///**VARS**///
 	let userStore = get(user);
 
 	let taskState = {};
+	let employeesTeam = [];
+	let tasksList = [];
+	let unwindEmployee = {};
 	let initialState = {
 		title: undefined,
 		description: undefined,
 		team: userStore.body.teamAdmin,
+
 		start: undefined,
 		end: undefined
 	};
 
+	$: {
+		taskState = Object.assign(taskState, { inCharge: unwindEmployee[0] });
+	}
+
 	$: taskState = initialState;
 
+	onMount(async () => {
+		let res;
+		res = await fetchTeamHours();
+		employeesTeam = await res.employeesTeam;
+		//console.log('employeesTeam', employeesTeam);
+	});
+
+	$: {
+		tasksList = employeesTeam.map(function (e) {
+			let obj = {};
+			obj['label'] = `${e.first_name} ${e.last_name}`;
+			obj['value'] = e._id;
+
+			return obj;
+		});
+	}
+	$: console.log('tasksList', tasksList);
+	$: console.log('Employee Select', unwindEmployee[0]);
+
 	//$: console.log('Task', results);
-	//$: console.log('data', taskState);
+	//$: console.log('taskState', taskState);
 </script>
 
 <div class="container md:max-w-5xl  px-4 mx-auto">
@@ -60,6 +89,15 @@
 					rows="6"
 					required={true}
 					bind:value={taskState.description}
+				/>
+			</div>
+			<div class="col-span-1 md:col-span-12 mb-4">
+				<Inputs
+					label="Employee in charge"
+					select={true}
+					multiselect={null}
+					options={tasksList}
+					bind:selectedValues={unwindEmployee}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
