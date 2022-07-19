@@ -3,6 +3,7 @@
 	import { user } from '@stores/login';
 	import { onMount } from 'svelte';
 	import { fetchTeams } from '@stores/teams';
+	import { fetchTeamHours } from '@stores/hours';
 	import { updateTasks } from '@stores/tasks';
 	import InlineSVG from 'svelte-inline-svg';
 	import Inputs from '@components/inputs.svelte';
