@@ -62,6 +62,7 @@
 		>
 			<div class="col-span-1 md:col-span-12">
 				<Inputs
+					class="mb-4"
 					label="Title"
 					name="title"
 					type="text"
@@ -71,6 +72,7 @@
 			</div>
 			<div class="col-span-1 md:col-span-12">
 				<Inputs
+					class="mb-4"
 					label="Description"
 					textarea={true}
 					name="description"
@@ -82,6 +84,7 @@
 
 			<div class="col-span-1 md:col-span-12 mb-4">
 				<Inputs
+					class="mb-4"
 					label="Admin"
 					select={true}
 					multiselect={null}

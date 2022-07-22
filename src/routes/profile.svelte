@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { loading } from '@stores/general';
 	import Inputs from '../components/inputs.svelte';
+	import { isValid } from '@stores/form';
 
 	///**VARS**///
 
@@ -15,9 +16,18 @@
 	};
 
 	let userState = {};
+	let timeValid = false;
+	let wastedTimeComponent = {};
+
+	let send;
 
 	//Call to employee data
 	onMount(async () => {
+		//console.log('wastedTimeComponent', wastedTimeComponent);
+
+		let inputss = document.querySelectorAll('input');
+		//console.log('inputss', inputss);
+
 		loading.set(true);
 		let userStore = get(user);
 		//console.log('userStore', userStore);
@@ -85,6 +95,12 @@
 	//$: console.log('resultados load', result);
 	//$: console.log('userState', userState);
 	//$: console.log('check', check.body._id);
+
+	send = (e) => {
+		console.log('e', e);
+	};
+
+	$: console.log('isValid', isValid);
 </script>
 
 <div class="container md:max-w-5xl px-4 mx-auto">
@@ -93,43 +109,54 @@
 	</div>
 	<div class="w-full bg-white rounded-xl p-6">
 		<form
-			on:submit|preventDefault={updateEmployee}
+			on:submit|preventDefault={(e) => {
+				e.preventDefault();
+				//console.log('e', e.target[0].value);
+				//console.log('isValid', get(isValid));
+
+				//updateEmployee()
+			}}
 			class="grid grid-cols-1 md:grid-cols-12 gap-x-8"
 		>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs
+					class="mb-4"
 					label="First Name"
 					name="first_name"
 					type="text"
-					required={true}
+					minLength="3"
+					validations={timeValid}
 					bind:value={userState.first_name}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs
+					class="mb-4"
 					label="Last Name"
 					name="last_name"
 					type="text"
-					required={true}
+					minLength="3"
 					bind:value={userState.last_name}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs
+					class="mb-4"
 					label="Email"
 					name="email"
 					type="email"
-					required={true}
+					minLength="3"
 					disabled={true}
 					bind:value={userState.email}
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs
+					class="mb-4"
 					label="Phone"
 					name="phone"
 					type="number"
-					required={true}
+					minLength="3"
 					bind:value={userState.phone}
 				/>
 			</div>

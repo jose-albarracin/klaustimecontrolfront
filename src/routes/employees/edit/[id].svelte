@@ -99,6 +99,7 @@
 		>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs
+					class="mb-4"
 					label="First Name"
 					name="first_name"
 					type="text"
@@ -117,6 +118,7 @@
 			</div>
 			<div class="col-span-1 md:col-span-12">
 				<Inputs
+					class="mb-4"
 					label="Phone"
 					name="phone"
 					type="number"
@@ -136,6 +138,7 @@
 			</div>
 			<div class="col-span-1 md:col-span-6 mb-4">
 				<Inputs
+					class="mb-4"
 					label="Roles"
 					select={true}
 					multiselect={true}
@@ -145,6 +148,7 @@
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs
+					class="mb-4"
 					label="Email"
 					name="email"
 					type="email"
@@ -154,6 +158,7 @@
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs
+					class="mb-4"
 					label="Password"
 					name="password"
 					type="password"

@@ -63,6 +63,7 @@
 
 			<div class="col-span-2 md:col-span-6 flex flex-col w-full ">
 				<Inputs
+					class="mb-4"
 					placeholder="First name"
 					name="firstName"
 					type="text"
@@ -73,6 +74,7 @@
 
 			<div class="col-span-2 md:col-span-6 flex flex-col w-full ">
 				<Inputs
+					class="mb-4"
 					placeholder="Last Name"
 					name="lastName"
 					type="text"
@@ -83,6 +85,7 @@
 
 			<div class="col-span-2 md:col-span-12 flex flex-col w-full ">
 				<Inputs
+					class="mb-4"
 					placeholder="Phone"
 					name="phone"
 					type="number"
@@ -93,6 +96,7 @@
 
 			<div class="col-span-2 md:col-span-6 flex flex-col w-full ">
 				<Inputs
+					class="mb-4"
 					placeholder="Email"
 					name="email"
 					type="email"
@@ -103,6 +107,7 @@
 
 			<div class="col-span-2 md:col-span-6 flex flex-col w-full ">
 				<Inputs
+					class="mb-4"
 					placeholder="Password"
 					name="password"
 					type="password"

@@ -116,6 +116,7 @@
 		>
 			<div class="col-span-1 md:col-span-6 mb-4">
 				<Inputs
+					class="mb-4"
 					label="Employee"
 					select={true}
 					multiselect={null}
@@ -132,6 +133,7 @@
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs
+					class="mb-4"
 					label="Date"
 					name="date"
 					type="date"
@@ -142,6 +144,7 @@
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs
+					class="mb-4"
 					label="Start"
 					name="start"
 					type="number"
@@ -150,7 +153,14 @@
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<Inputs label="End" name="end" type="number" required={true} bind:value={hoursState.end} />
+				<Inputs
+					class="mb-4"
+					label="End"
+					name="end"
+					type="number"
+					required={true}
+					bind:value={hoursState.end}
+				/>
 			</div>
 
 			<div class="col-span-1 md:col-span-12 flex justify-center">

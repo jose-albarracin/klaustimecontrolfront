@@ -74,6 +74,7 @@
 		>
 			<div class="col-span-1 md:col-span-12">
 				<Inputs
+					class="mb-4"
 					label="Title"
 					name="title"
 					type="text"
@@ -83,6 +84,7 @@
 			</div>
 			<div class="col-span-1 md:col-span-12">
 				<Inputs
+					class="mb-4"
 					textarea={true}
 					label="Description"
 					name="description"
@@ -93,6 +95,7 @@
 			</div>
 			<div class="col-span-1 md:col-span-12 mb-4">
 				<Inputs
+					class="mb-4"
 					label="Employee in charge"
 					select={true}
 					multiselect={null}
@@ -102,6 +105,7 @@
 			</div>
 			<div class="col-span-1 md:col-span-6">
 				<Inputs
+					class="mb-4"
 					label="Start"
 					name="start"
 					type="date"
@@ -110,7 +114,14 @@
 				/>
 			</div>
 			<div class="col-span-1 md:col-span-6">
-				<Inputs label="End" name="end" type="date" required={true} bind:value={taskState.end} />
+				<Inputs
+					class="mb-4"
+					label="End"
+					name="end"
+					type="date"
+					required={true}
+					bind:value={taskState.end}
+				/>
 			</div>
 			<div class="col-span-1 md:col-span-12 flex justify-center">
 				<button

@@ -117,6 +117,7 @@
 					</div>
 					<div class="flex flex-col w-full p-6">
 						<Inputs
+							class="mb-4"
 							placeholder="Enter Email"
 							name="user"
 							type="text"
@@ -125,6 +126,7 @@
 						/>
 
 						<Inputs
+							class="mb-4"
 							placeholder="Enter Password"
 							name="password"
 							type="password"
