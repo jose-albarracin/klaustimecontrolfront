@@ -75,10 +75,10 @@
 			<div class="col-span-1 md:col-span-12">
 				<Inputs
 					class="mb-4"
+					minLength="3"
 					label="Title"
 					name="title"
 					type="text"
-					required={true}
 					bind:value={taskState.title}
 				/>
 			</div>

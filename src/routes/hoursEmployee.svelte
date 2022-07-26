@@ -86,10 +86,10 @@
 		isTask = await fetchTeamTasksInCharged(userData.body._id);
 
 		if (isTask) {
-			console.log('HAY TAREAS');
-			console.log(isTask);
+			//console.log('HAY TAREAS');
+			//console.log(isTask);
 		} else {
-			console.log('NO HAY TAREAS');
+			//console.log('NO HAY TAREAS');
 		}
 	});
 
@@ -103,7 +103,7 @@
 
 	//$: createHourLocal();
 
-	$: console.log('Results', results);
+	//$: console.log('Results', results);
 </script>
 
 <div class="container md:max-w-5xl px-6 mx-auto h-max">
@@ -122,6 +122,7 @@
 						label="Start"
 						name="start"
 						type="number"
+						minLength="1"
 						required={true}
 						bind:value={stateHour.start}
 					/>
@@ -132,6 +133,7 @@
 						label="End"
 						name="end"
 						type="number"
+						minLength="1"
 						required={true}
 						bind:value={stateHour.end}
 					/>

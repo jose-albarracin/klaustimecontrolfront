@@ -17,7 +17,8 @@ module.exports = {
 				'jungle-green': '#29AE76'
 			},
 			boxShadow: {
-				btnCount: '0px 5px 10px 1px rgba(101,102,234,0.30);'
+				btnCount: '0px 5px 10px 1px rgba(101,102,234,0.30);',
+				inputShadow: '0px 0px 12px 0px rgb(0 0 0 / 10%);'
 			}
 		}
 	},
