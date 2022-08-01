@@ -240,7 +240,7 @@
 							},
 							tooltip: {
 								enabled: false,
-								position: 'nearest',
+								position: 'average',
 								displayColors: false,
 								bodyFont: {
 									family: 'Plus Jakarta Sans'

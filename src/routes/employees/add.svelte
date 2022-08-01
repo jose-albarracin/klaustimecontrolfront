@@ -84,6 +84,7 @@
 					label="Phone"
 					name="phone"
 					type="number"
+					minLength="1"
 					required={true}
 					bind:value={employeeState.phone}
 				/>

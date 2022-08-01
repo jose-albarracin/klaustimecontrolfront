@@ -19,7 +19,7 @@
 	let timeValid = false;
 	let wastedTimeComponent = {};
 
-	let send;
+	let eventResValue;
 
 	//Call to employee data
 	onMount(async () => {
@@ -96,8 +96,8 @@
 	//$: console.log('userState', userState);
 	//$: console.log('check', check.body._id);
 
-	send = (e) => {
-		console.log('e', e);
+	eventResValue = (e) => {
+		console.log('e', e.detail);
 	};
 
 	$: console.log('isValid', isValid);
@@ -110,9 +110,8 @@
 	<div class="w-full bg-white rounded-xl p-6">
 		<form
 			on:submit|preventDefault={(e) => {
-				e.preventDefault();
 				//console.log('e', e.target[0].value);
-				//console.log('isValid', get(isValid));
+				console.log('PASÓ');
 
 				//updateEmployee()
 			}}
@@ -125,7 +124,6 @@
 					name="first_name"
 					type="text"
 					minLength="3"
-					validations={timeValid}
 					bind:value={userState.first_name}
 				/>
 			</div>

@@ -80,6 +80,7 @@
 					label="Start"
 					name="start"
 					type="number"
+					minLength="1"
 					required={true}
 					bind:value={hoursState.start}
 				/>
@@ -90,6 +91,7 @@
 					label="End"
 					name="end"
 					type="number"
+					minLength="1"
 					required={true}
 					bind:value={hoursState.end}
 				/>

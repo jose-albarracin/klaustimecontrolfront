@@ -120,7 +120,7 @@
 							class="mb-4"
 							placeholder="Enter Email"
 							name="user"
-							type="text"
+							type="email"
 							required={true}
 							bind:value={userLogin.email}
 						/>

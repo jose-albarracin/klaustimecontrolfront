@@ -12,8 +12,8 @@ const config = {
 					// these are the aliases and paths to them
 					/* '@engine': path.resolve('./src/routes/engine'), */
 					'@stores': path.resolve('./src/stores'),
-					'@components': path.resolve('./src/components') /* 
-					'@utils': path.resolve('./src/lib/utils') */
+					'@components': path.resolve('./src/components'),
+					'@utils': path.resolve('./src/utils')
 				}
 			}
 		}

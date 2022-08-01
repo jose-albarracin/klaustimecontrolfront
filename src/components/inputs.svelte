@@ -62,27 +62,21 @@
 			showIcon = true;
 			valueMatch = expressions.name.test(val) ? true : false;
 			valueMinLength = val.length >= minLength ? true : false;
-
-			//console.log('valueMatch', valueMatch);
-			//console.log('valueMinLength', valueMinLength);
+			//inputSelected.setCustomValidity('');
 
 			if (valueMatch && (valueMinLength || !minLength)) {
-				inputSelected.setAttribute('isvalid', 'true');
+				//inputSelected.setAttribute('isvalid', 'true');
 				isError = false;
 				//console.log('No Hay Error');
 			} else {
 				isError = true;
-				/* console.log('checkBV', inputSelected.reportValidity());
-				inputSelected.setAttribute('aria-invalid', true);
 
-				inputSelected.checkValidity('invalid'); */
-				//console.log('checkBV2', inputSelected.validity);
-
-				msgError = !valueMinLength
-					? `The field must have more than ${minLength} characters.`
-					: !valueMatch
-					? 'The field cannot contain symbols.'
-					: '';
+				msgError =
+					!valueMinLength && minLength
+						? `The field must have more than ${minLength} characters.`
+						: !valueMatch
+						? 'The field cannot contain symbols.'
+						: '';
 
 				//console.log('Hay error');
 			}
@@ -94,21 +88,22 @@
 			valueMatch = expressions.email.test(val) ? true : false;
 			valueMinLength = val.length >= minLength ? true : false;
 
-			if (valueMatch && valueMinLength) {
+			if (valueMatch && (valueMinLength || !minLength)) {
+				//inputSelected.setAttribute('isvalid', 'true');
 				isError = false;
 				//console.log('No Hay Error');
 			} else {
 				isError = true;
-				msgError = !valueMinLength
-					? `The field must have more than ${minLength} characters.`
-					: !valueMatch
-					? 'Enter a valid Email'
-					: '';
+
+				msgError =
+					!valueMinLength && minLength
+						? `The field must have more than ${minLength} characters.`
+						: !valueMatch
+						? 'Please enter a valid email'
+						: '';
 
 				//console.log('Hay error');
 			}
-
-			//console.log('el campo es correcto!', val);
 		}
 		if (type == 'number') {
 			showIcon = true;
@@ -208,12 +203,11 @@
 					{disabled}
 					on:keypress={onKeyPressEnter ? onKeyPressEnter : null}
 					on:keyup={(e) => {
+						/* dispatch('eventValue', e.target.value); */
 						validation(e.target.value);
 					}}
 					on:blur={(e) => {
-						validation(e.target.value);
-					}}
-					on:input={(e) => {
+						/* dispatch('eventValue', e.target.value); */
 						validation(e.target.value);
 					}}
 				/>

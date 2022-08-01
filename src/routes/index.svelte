@@ -95,18 +95,7 @@
 		userStore = get(user);
 		//console.log('user', userData.body._id);
 		isTask = await fetchTeamTasksInCharged(userStore.body._id);
-
-		/* if (isTask) {
-			//console.log('HAY TAREAS');
-			//console.log(isTask);
-		} else {
-			console.log('NO HAY TAREAS');
-		} */
 	});
-
-	//$: console.log('profile');
-
-	//$: console.log('LuxonTOTAL DATA', DateTime.now());
 
 	$: fetchHour();
 
@@ -168,11 +157,7 @@
 					.map((item) => {
 						let now = DateTime.now().toFormat('yyyy-MM-dd');
 						let dateCurrent = DateTime.fromISO(item.createdAt).toUTC().toFormat('yyyy-MM-dd');
-						//console.log('----------------------------');
-						//console.log('now', now);
-						//console.log('createdAt', item.createdAt);
-						//console.log('DateTime.fromISO', DateTime.fromISO(item.createdAt).toUTC());
-						//console.log('dateCurrentTODAY', dateCurrent);
+
 						if (now == dateCurrent) {
 							return item.hours_worked;
 						}
@@ -669,8 +654,6 @@
 		<div
 			class="w-full bg-white rounded-xl p-6 flex flex-col items-center justify-center mb-6 shadow-lg"
 		>
-			<!-- <h2 class="uppercase text-center font-semibold text-xl text-gray-400 mb-4">My hours</h2> -->
-			<!-- <canvas class="!w-[70%] !h-fit !flex" id="myTeamHoursChart" /> -->
 			<div class="w-full md:w-11/12">
 				<div class="flex flex-col md:flex-row justify-between items-center relative">
 					<h2 class="text-secondary text-xl font-bold mb-4 ">My Hours</h2>

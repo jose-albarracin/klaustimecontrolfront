@@ -1,6 +1,6 @@
 <script>
 	import Inputs from '@components/inputs.svelte';
-	//import { user, setStorageUser, logOutSocial } from '@stores/login';
+
 	import InlineSVG from 'svelte-inline-svg';
 
 	let userSignUp = {
@@ -89,6 +89,7 @@
 					placeholder="Phone"
 					name="phone"
 					type="number"
+					minLength="1"
 					required={true}
 					bind:value={userSignUp.phone}
 				/>

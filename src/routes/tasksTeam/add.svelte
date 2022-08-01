@@ -15,6 +15,7 @@
 	let employeesTeam = [];
 	let tasksList = [];
 	let unwindEmployee = {};
+
 	let initialState = {
 		title: undefined,
 		description: undefined,
