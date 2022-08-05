@@ -6,9 +6,8 @@
 		"npm": "8.x"
 	},
 	"scripts": {
-		"dev": "svelte-kit dev",
-		"build:only": "svelte-kit build",
-		"build": "npm run build:only",
+		"dev": "vite dev",
+		"build": "vite build",
 		"start": "node build/index.js",
 		"package": "svelte-kit package",
 		"preview": "svelte-kit preview",
@@ -21,27 +20,28 @@
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/adapter-node": "^1.0.0-next.85",
 		"@sveltejs/kit": "next",
-		"autoprefixer": "^10.4.7",
-		"eslint": "^8.12.0",
-		"eslint-config-prettier": "^8.3.0",
+		"autoprefixer": "^10.4.8",
+		"eslint": "^8.21.0",
+		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"postcss": "^8.4.14",
-		"prettier": "^2.5.1",
-		"prettier-plugin-svelte": "^2.5.0",
-		"svelte": "^3.44.0",
+		"prettier": "^2.7.1",
+		"prettier-plugin-svelte": "^2.7.0",
+		"svelte": "^3.49.0",
 		"svelte-preprocess": "^4.10.7",
-		"tailwindcss": "^3.0.24"
+		"tailwindcss": "^3.1.8"
 	},
 	"type": "module",
 	"dependencies": {
-		"chart.js": "^3.8.0",
+		"chart.js": "^3.9.1",
 		"chartjs-plugin-crosshair": "^1.2.0",
 		"chartjs-plugin-style": "^0.5.0",
 		"cookie": "^0.5.0",
-		"luxon": "^2.4.0",
-		"supertokens-website": "^12.0.0",
+		"luxon": "^3.0.1",
+		"supertokens-website": "^13.0.1",
 		"svelte-inline-svg": "^1.1.3",
-		"svelte-multiselect": "^5.0.1",
-		"svelte-navigator": "^3.1.6"
+		"svelte-multiselect": "^5.0.6",
+		"svelte-navigator": "^3.1.6",
+		"vite": "^3.0.4"
 	}
 }
