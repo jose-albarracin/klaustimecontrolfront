@@ -64,7 +64,7 @@
 		await deleteTasks(event.detail);
 		results = await fetchTasks();
 	}
-	//$: console.log('Results tasks', results);
+	$: console.log('Results tasks', results);
 </script>
 
 <div class="container px-6 md:max-w-5xl h-max mx-auto">

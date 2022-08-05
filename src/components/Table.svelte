@@ -132,7 +132,7 @@
 													{subfields.name}:&nbsp;<span
 														class="text-tertiary font-medium text-[0.8rem]"
 													>
-														{item.team.title}
+														{item.team ? item.team.title : ''}
 													</span>
 												</p>
 											</div>
