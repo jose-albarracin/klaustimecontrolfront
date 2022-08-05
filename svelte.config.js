@@ -5,7 +5,7 @@ import path from 'path';
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
-		adapter: adapter({ out: 'build', precompress: false, envPrefix: '' }),
+		adapter: adapter(),
 		vite: {
 			resolve: {
 				alias: {
