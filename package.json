@@ -8,8 +8,7 @@
 	"scripts": {
 		"dev": "svelte-kit dev",
 		"build:only": "svelte-kit build",
-		"tailwind:build": "cross-env TAILWIND_MODE=build cross-env NODE_ENV=production postcss src/app.css -o src/styles/tailwind-output.css",
-		"build": "npm run tailwind:build && npm run build:only",
+		"build": "npm run build:only",
 		"start": "svelte-kit start",
 		"package": "svelte-kit package",
 		"preview": "svelte-kit preview",
