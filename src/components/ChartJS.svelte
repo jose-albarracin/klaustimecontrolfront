@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import Chart from 'chart.js/auto';
+	import Chart from 'chart.js/auto/auto.js';
 	import 'chartjs-plugin-style';
 	import { fade, scale } from 'svelte/transition';
 	let cond = true;
