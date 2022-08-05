@@ -8,7 +8,7 @@
 	"scripts": {
 		"dev": "svelte-kit dev",
 		"build": "svelte-kit build",
-		"start": "node build/index.js",
+		"start": "svelte-kit build && node create-build-package.mjs && rm -rf build/prerendered/api",
 		"package": "svelte-kit package",
 		"preview": "svelte-kit preview",
 		"prepare": "svelte-kit sync",
