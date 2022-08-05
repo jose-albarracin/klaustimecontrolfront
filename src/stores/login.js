@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { apiBackend } from './general';
 
 function userStore() {
 	const { subscribe, set } = writable(
@@ -53,7 +54,7 @@ export let logOutSocial = async () => {
 			//'Access-Control-Allow-Origin': '*'
 		}
 	};
-	const url = 'http://localhost:3002/auth/logout';
+	const url = `${apiBackend}/auth/logout`;
 	//console.log('url', url);
 	const res = await fetch(url, config);
 

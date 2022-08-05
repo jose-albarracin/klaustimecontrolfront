@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 import { user } from './login';
-import { loading } from './general';
+import { loading, apiBackend } from './general';
 
 export const fetchEmployees = async () => {
 	loading.set(true);
@@ -14,7 +14,7 @@ export const fetchEmployees = async () => {
 			Authorization: `Bearer ${userStore.token}`
 		}
 	};
-	const url = 'http://localhost:3002/api/employees';
+	const url = `${apiBackend}/api/employees`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -39,7 +39,7 @@ export const createEmployees = async (stateEmployee) => {
 		},
 		body: JSON.stringify(stateEmployee)
 	};
-	const url = 'http://localhost:3002/api/employees';
+	const url = `${apiBackend}/api/employees`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -65,7 +65,7 @@ export const updateEmployees = async (stateEmployee, id) => {
 
 		body: JSON.stringify(stateEmployee)
 	};
-	const url = `http://localhost:3002/api/employees/${id}`;
+	const url = `${apiBackend}/api/employees/${id}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -89,7 +89,7 @@ export const deleteEmployees = async (id) => {
 			Authorization: `Bearer ${userStore.token}`
 		}
 	};
-	const url = `http://localhost:3002/api/employees/${id}`;
+	const url = `${apiBackend}/api/employees/${id}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -115,7 +115,7 @@ export const fetchEmployeeProfile = async () => {
 	};
 	let body = userStore.body;
 	//console.log('userStore.body_id', body._id);
-	const url = `http://localhost:3002/api/employees/${body._id}`;
+	const url = `${apiBackend}/api/employees/${body._id}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();

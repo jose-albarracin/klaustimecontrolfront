@@ -1,6 +1,6 @@
 import { get, writable } from 'svelte/store';
 import { user } from './login';
-import { loading } from './general';
+import { loading, apiBackend } from './general';
 export const profile = writable([]);
 
 export const fetchProfile = async () => {
@@ -20,7 +20,7 @@ export const fetchProfile = async () => {
 	};
 	///console.log('VERIFY', userStore.body._id);
 
-	const url = `http://localhost:3002/api/employees/`;
+	const url = `${apiBackend}/api/employees/`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();

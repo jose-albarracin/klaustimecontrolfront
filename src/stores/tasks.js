@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 import { user } from './login';
-import { loading } from './general';
+import { loading, apiBackend } from './general';
 
 export const fetchTeamTasks = async () => {
 	loading.set(true);
@@ -15,7 +15,7 @@ export const fetchTeamTasks = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3002/api/teamTasks/${userStore.body.teamAdmin}`;
+	const url = `${apiBackend}/api/teamTasks/${userStore.body.teamAdmin}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -43,7 +43,7 @@ export const fetchTasks = async () => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3002/api/tasks`;
+	const url = `${apiBackend}/api/tasks`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
@@ -70,7 +70,7 @@ export const createTasks = async (body) => {
 		body: JSON.stringify(body)
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3002/api/tasks`;
+	const url = `${apiBackend}/api/tasks`;
 	const res = await fetch(url, config);
 	//console.log('response', res);
 	if (res.ok) {
@@ -93,7 +93,7 @@ export const updateTasks = async (body, id) => {
 		body: JSON.stringify(body)
 	};
 	console.log('condig', config);
-	const url = `http://localhost:3002/api/tasks/${id}`;
+	const url = `${apiBackend}/api/tasks/${id}`;
 	const res = await fetch(url, config);
 	//console.log('response', res);
 	if (res.ok) {
@@ -115,7 +115,7 @@ export const deleteTasks = async (id) => {
 		}
 	};
 	///console.log('condig', config);
-	const url = `http://localhost:3002/api/tasks/${id}`;
+	const url = `${apiBackend}/api/tasks/${id}`;
 	const res = await fetch(url, config);
 	//console.log('response', res);
 	if (res.ok) {
@@ -137,7 +137,7 @@ export const fetchTeamTasksInCharged = async (id) => {
 		}
 	};
 	//console.log('condig', config);
-	const url = `http://localhost:3002/api/tasksInCharge/${id}`;
+	const url = `${apiBackend}/api/tasksInCharge/${id}`;
 	const res = await fetch(url, config);
 
 	const data = await res.json();
