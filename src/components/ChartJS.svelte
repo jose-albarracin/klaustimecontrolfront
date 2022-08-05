@@ -5,6 +5,7 @@
 	import { fade, scale } from 'svelte/transition';
 	let cond = true;
 	import { DateTime } from 'luxon';
+	//Nuevo comentario
 
 	const animate = (node, args) => (args.cond ? fade(node, args) : scale(node, args));
 
