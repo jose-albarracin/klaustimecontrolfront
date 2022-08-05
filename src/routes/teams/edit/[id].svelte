@@ -24,7 +24,7 @@
 			}
 		};
 		//console.log('condig', config);
-		const urlData = `http://localhost:3002/api/teams/${id}`;
+		const urlData = `${apiBackend}/api/teams/${id}`;
 		const res = await fetch(urlData, config);
 
 		const data = await res.json();

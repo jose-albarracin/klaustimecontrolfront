@@ -25,7 +25,7 @@
 			}
 		};
 		console.log('userStore', userStore);
-		const urlData = `http://localhost:3002/api/employees/${id}`;
+		const urlData = `${apiBackend}/api/employees/${id}`;
 		const res = await fetch(urlData, config);
 
 		const data = await res.json();

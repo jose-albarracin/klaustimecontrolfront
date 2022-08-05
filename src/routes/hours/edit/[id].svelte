@@ -24,7 +24,7 @@
 			}
 		};
 		//console.log('condig', config);
-		const urlData = `http://localhost:3002/api/hours/${id}`;
+		const urlData = `${apiBackend}/api/hours/${id}`;
 		const res = await fetch(urlData, config);
 
 		const data = await res.json();
