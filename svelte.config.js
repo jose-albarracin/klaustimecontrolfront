@@ -1,11 +1,11 @@
-import adapter from '@sveltejs/adapter-node';
+import node from '@sveltejs/adapter-node';
 import preprocess from 'svelte-preprocess';
 import path from 'path';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
-		adapter: adapter({ out: 'production' }),
+		adapter: node({ env: { port: process.env.PORT } }),
 		vite: {
 			resolve: {
 				alias: {
