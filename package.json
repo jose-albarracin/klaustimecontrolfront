@@ -9,7 +9,7 @@
 		"dev": "svelte-kit dev",
 		"build:only": "svelte-kit build",
 		"build": "npm run build:only",
-		"start": "svelte-kit start",
+		"start": "node build/index.js",
 		"package": "svelte-kit package",
 		"preview": "svelte-kit preview",
 		"prepare": "svelte-kit sync",
