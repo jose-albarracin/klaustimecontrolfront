@@ -7,7 +7,7 @@
 	import { updateTasks } from '@stores/tasks';
 	import InlineSVG from 'svelte-inline-svg';
 	import Inputs from '@components/inputs.svelte';
-	import { loading } from '@stores/general';
+	import { loading, apiBackend } from '@stores/general';
 
 	export async function load({ fetch, params }) {
 		loading.set(true);

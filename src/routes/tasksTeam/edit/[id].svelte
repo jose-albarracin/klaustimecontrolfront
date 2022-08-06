@@ -3,10 +3,12 @@
 	import { user } from '@stores/login';
 	import { updateTasks } from '@stores/tasks';
 	import { fetchTeamHours } from '@stores/hours';
+	import { loading, apiBackend } from '@stores/general';
 	import { onMount } from 'svelte';
 	export async function load({ fetch, params }) {
 		let id = params.id;
 		console.log('params', id);
+		loading.set(true);
 		let userStore = get(user);
 		let config = {
 			//mode: 'no-cors'
@@ -32,6 +34,7 @@
 
 		//console.log('llame de nuevo', data);
 		if (res.ok) {
+			loading.set(false);
 			return {
 				props: {
 					results
