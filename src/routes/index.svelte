@@ -22,11 +22,11 @@
 	import { get } from 'svelte/store';
 	import ChartJS from '../components/ChartJS.svelte';
 	import ChartJsGroups from '../components/ChartJsGroups.svelte';
-	import { DateTime, Info, Interval } from 'luxon';
+	import { DateTime } from 'luxon';
 
 	import { dataWeekly, dataMonthly, dataYearly } from '../utils/dataForChartJs';
 
-	
+	// richard
 
 	///**VARS**///
 
