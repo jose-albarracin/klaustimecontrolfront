@@ -65,15 +65,15 @@
 
 	function teamFromResults() {
 		let obj = {};
-		obj['label'] = results.team.title;
-		obj['value'] = results.team._id;
+		obj['label'] = results.team ? results.team.title : '';
+		obj['value'] = results.team ? results.team._id : '';
 
 		return obj;
 	}
 
 	$: {
 		taskState = Object.assign(taskState, {
-			team: unwindTeam[0] ? unwindTeam[0].value : ''
+			team: unwindTeam[0] ? unwindTeam[0].value : null
 		});
 	}
 
@@ -91,6 +91,7 @@
 
 	//$: console.log('unwindAdmin', unwindAdmin);
 	//$: console.log('teamsList', teamsList);
+	//$: console.log('taskState', taskState);
 </script>
 
 <div class="container px-6 mx-auto md:max-w-5xl h-max">
