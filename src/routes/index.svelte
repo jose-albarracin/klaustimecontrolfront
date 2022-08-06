@@ -26,8 +26,7 @@
 
 	import { dataWeekly, dataMonthly, dataYearly } from '../utils/dataForChartJs';
 
-	//const { NODE_ENV } = process.env;
-	//console.log('ESTADO DE NODE', NODE_ENV);
+	
 
 	///**VARS**///
 
