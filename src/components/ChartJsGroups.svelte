@@ -2,12 +2,10 @@
 	import { onMount } from 'svelte';
 	import Chart from 'chart.js/auto/auto.js';
 	import 'chartjs-plugin-style';
-	import { fade, scale } from 'svelte/transition';
+
 	let cond = true;
 
 	import { DateTime } from 'luxon';
-
-	const animate = (node, args) => (args.cond ? fade(node, args) : scale(node, args));
 
 	export let dataLabelsAndData;
 	export let type;

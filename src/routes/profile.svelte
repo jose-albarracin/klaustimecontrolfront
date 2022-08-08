@@ -2,7 +2,7 @@
 	import { get } from 'svelte/store';
 	import { user } from '../stores/login';
 	import { onMount } from 'svelte';
-	import { loading } from '@stores/general';
+	import { loading, apiBackend } from '@stores/general';
 	import Inputs from '../components/inputs.svelte';
 	import { isValid } from '@stores/form';
 
