@@ -12,6 +12,9 @@ const config = {
 			'@components': path.resolve('./src/components'),
 			'@utils': path.resolve('./src/utils')
 		}
+	},
+	build: {
+		chunkSizeWarningLimit: 1600
 	}
 };
 

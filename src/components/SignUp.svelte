@@ -1,5 +1,6 @@
 <script>
 	import Inputs from '@components/inputs.svelte';
+	import { loading, apiBackend } from '@stores/general';
 
 	import InlineSVG from 'svelte-inline-svg';
 
