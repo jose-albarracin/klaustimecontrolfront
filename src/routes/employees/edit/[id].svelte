@@ -24,7 +24,7 @@
 				Authorization: `Bearer ${userStore.token}`
 			}
 		};
-		console.log('userStore', userStore);
+		//console.log('userStore', userStore);
 		const urlData = `${apiBackend}/api/employees/${id}`;
 		const res = await fetch(urlData, config);
 

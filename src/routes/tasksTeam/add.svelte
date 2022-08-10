@@ -47,8 +47,8 @@
 			return obj;
 		});
 	}
-	$: console.log('tasksList', tasksList);
-	$: console.log('Employee Select', unwindEmployee[0]);
+	//$: console.log('tasksList', tasksList);
+	//$: console.log('Employee Select', unwindEmployee[0]);
 
 	//$: console.log('Task', results);
 	//$: console.log('taskState', taskState);

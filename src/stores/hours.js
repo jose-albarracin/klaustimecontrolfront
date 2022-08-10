@@ -125,7 +125,7 @@ export const fetchHours = async () => {
 		loading.set(false);
 	}
 	//console.log(data);
-	console.log(data['hours']);
+	//console.log(data['hours']);
 	return data['hours'];
 };
 

@@ -150,7 +150,7 @@
 
 		let hoursExpected = 8;
 		let registers = res ? await res.Registers : undefined;
-		console.log('registers ', registers);
+		//console.log('registers ', registers);
 
 		let labels = ['start', 'end'];
 		let data = [];
@@ -398,7 +398,7 @@
 	dataTotalEmployeesWeekly = async () => {
 		let dataResults = await fetchTotalEmployeesWeekly();
 
-		console.log('dataResults', dataResults);
+		//console.log('dataResults', dataResults);
 
 		let array = [];
 		let array2 = [];

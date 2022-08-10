@@ -77,7 +77,7 @@
 
 			body: JSON.stringify(userState)
 		};
-		console.log('condig', config);
+		//console.log('condig', config);
 		const url = `${apiBackend}/api/employees/${userStore.body._id}`;
 		const res = await fetch(url, config);
 
@@ -100,7 +100,7 @@
 		console.log('e', e.detail);
 	};
 
-	$: console.log('isValid', isValid);
+	//$: console.log('isValid', isValid);
 </script>
 
 <div class="container md:max-w-5xl px-4 mx-auto">
@@ -111,8 +111,7 @@
 		<form
 			on:submit|preventDefault={(e) => {
 				//console.log('e', e.target[0].value);
-				console.log('PASÓ');
-
+				//console.log('PASÓ');
 				//updateEmployee()
 			}}
 			class="grid grid-cols-1 md:grid-cols-12 gap-x-8"

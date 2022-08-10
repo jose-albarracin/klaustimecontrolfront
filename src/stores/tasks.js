@@ -92,7 +92,7 @@ export const updateTasks = async (body, id) => {
 		},
 		body: JSON.stringify(body)
 	};
-	console.log('condig', config);
+	//console.log('condig', config);
 	const url = `${apiBackend}/api/tasks/${id}`;
 	const res = await fetch(url, config);
 	//console.log('response', res);

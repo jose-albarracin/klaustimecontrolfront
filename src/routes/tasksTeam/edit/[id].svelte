@@ -89,9 +89,9 @@
 		return obj;
 	}
 
-	$: console.log('unwindEmployee', unwindEmployee);
-	$: console.log('taskState', taskState);
-	$: console.log('Results', results);
+	//$: console.log('unwindEmployee', unwindEmployee);
+	//$: console.log('taskState', taskState);
+	//$: console.log('Results', results);
 </script>
 
 <div class="container md:max-w-5xl px-4 mx-auto shadow-sm">

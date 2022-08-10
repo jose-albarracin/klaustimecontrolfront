@@ -33,7 +33,7 @@
 		const res = await fetch(url, config);
 
 		const data = await res.json();
-		console.log(data);
+		//console.log(data);
 		responseSignUp = data;
 
 		//userSignUp = Object.assign(userSignUp, initialObject);
