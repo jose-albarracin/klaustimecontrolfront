@@ -67,7 +67,7 @@
 		//console.log('res', res);
 		const data = await res.json();
 
-		//console.log('dataGoogle', data);
+		console.log('dataGoogle', data);
 
 		user.loginUser(data);
 		//isRole();
