@@ -11,7 +11,8 @@ const config = {
 		preprocess({
 			postcss: true
 		})
-	]
+	],
+	ssr: false
 };
 
 export default config;
