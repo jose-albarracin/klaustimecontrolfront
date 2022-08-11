@@ -14,10 +14,10 @@ const config = {
 		}
 	},
 	build: {
-		chunkSizeWarningLimit: 1600,
-		rollupOptions: {
+		chunkSizeWarningLimit: 1600
+		/* rollupOptions: {
 			external: ['chart.js']
-		}
+		} */
 	},
 	ssr: {
 		noExternal: ['chart.js']
