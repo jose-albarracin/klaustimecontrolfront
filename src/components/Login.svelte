@@ -147,6 +147,7 @@
 								type="submit"
 								on:click={async () => {
 									const urlD = `${apiBackend}/auth/google`;
+									console.log('url go', urlD);
 									window.open(urlD, '_self');
 									//submitLoginGoogle();
 								}}

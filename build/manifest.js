@@ -3,7 +3,7 @@ export const manifest = {
 	assets: new Set([".DS_Store","favicon.png","icons/.DS_Store","icons/Spin-1s-200px.svg","icons/arrow-left-solid.svg","icons/chart-line-solid.svg","icons/circle-check-solid.svg","icons/circle-xmark-solid.svg","icons/clock-solid.svg","icons/facebook-brands.svg","icons/floppy-disk-solid.svg","icons/google-brands.svg","icons/house-solid.svg","icons/list-check-solid.svg","icons/loading.svg","icons/pen-to-square-solid.svg","icons/people-group-solid.svg","icons/person-solid.svg","icons/right-from-bracket-solid.svg","icons/table-columns-solid.svg","icons/trash-solid.svg","icons/user-clock-solid.svg"]),
 	mimeTypes: {".png":"image/png",".svg":"image/svg+xml"},
 	_: {
-		entry: {"file":"_app/immutable/start-f8d0d236.js","imports":["_app/immutable/start-f8d0d236.js","_app/immutable/chunks/index-213b7a90.js","_app/immutable/chunks/index-01a17379.js","_app/immutable/chunks/singletons-eca981c1.js"],"stylesheets":[]},
+		entry: {"file":"_app/immutable/start-d3ce12d7.js","imports":["_app/immutable/start-d3ce12d7.js","_app/immutable/chunks/index-213b7a90.js","_app/immutable/chunks/index-01a17379.js","_app/immutable/chunks/singletons-eca981c1.js"],"stylesheets":[]},
 		nodes: [
 			() => import('./server/nodes/0.js'),
 			() => import('./server/nodes/1.js'),
